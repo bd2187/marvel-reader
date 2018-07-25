@@ -65,6 +65,7 @@ router.post("/login", function(req, res) {
   // Find user in DB
   let promise = User.findOne({ username }).exec();
 
+  // TODO: INCORPORATE ERROR HANDLING
   promise
     .then(user => {
       // If User doesn't exist, send error message
@@ -83,7 +84,8 @@ router.post("/login", function(req, res) {
         const payload = {
           username: user.username,
           email: user.email,
-          signUpDate: user.signUpDate
+          signUpDate: user.signUpDate,
+          id: user._id
         };
 
         // Sign token with 1 hour expiration date
@@ -106,5 +108,18 @@ router.post("/login", function(req, res) {
       res.send(err);
     });
 });
+
+/**
+ * Route: /user/dashboard
+ * Desc: User Dashboard
+ * Private Route
+ */
+router.post(
+  "/dashboard",
+  passport.authenticate("jwt", { session: false }),
+  function(req, res) {
+    res.send({ private: "private" });
+  }
+);
 
 module.exports = router;
