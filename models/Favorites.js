@@ -8,7 +8,7 @@ const favoritesSchema = new Schema({
   },
   comics: [
     {
-      id: { type: Number, required: true },
+      comicID: { type: Number, required: true },
       title: { type: String, required: true },
       dateAdded: { type: Date, default: Date.now },
       published: { type: Date, required: true },
@@ -17,7 +17,7 @@ const favoritesSchema = new Schema({
   ],
   characters: [
     {
-      id: { type: Number, required: true },
+      characterID: { type: Number, required: true },
       name: { type: String, required: true },
       dateAdded: { type: Date, default: Date.now },
       thumbnail: { type: String }
