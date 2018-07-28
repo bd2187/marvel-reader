@@ -114,11 +114,41 @@ router.post(
 );
 
 /**
+ * Route: /favorites/delete/character
+ * Desc: Delete character from user's collection
+ * Private Route
+ */
+router.delete(
+  "/delete/character",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const userID = req.user.id;
+    const { characterID } = req.body;
+
+    Favorites.findOne({ user: userID }).then(favorites => {
+      if (!favorites) {
+        return res.json({ status: "fail", msg: "could not find favorites" });
+      } else {
+        const updatedFavoriteCharacters = favorites.comics.filter(
+          character => character.characterID != characterID
+        );
+        Favorites.findOneAndUpdate(
+          { user: userID },
+          { characters: updatedFavoriteCharacters },
+          { new: true }
+        ).then(updatedCharacters => {
+          return res.json({ status: "success", updatedCharacters });
+        });
+      }
+    });
+  }
+);
+
+/**
  * Route: /favorites/delete/comic
  * Desc: Delete comic from user's collection
  * Private Route
  */
-
 router.delete(
   "/delete/comic",
 
