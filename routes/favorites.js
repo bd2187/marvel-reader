@@ -3,7 +3,28 @@ const router = express.Router();
 const passport = require("passport");
 
 const Favorites = require("../models/Favorites");
-const User = require("../models/User");
+
+/**
+ * Route: /favorites/comic/all
+ * Desc: Fetches all of the user's favorite comics
+ * Private Route
+ */
+router.get(
+  "/comic/all",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Favorites.findOne({ user: req.user.id }).then(favorites => {
+      if (favorites) {
+        return res.json({ comics: favorites.comics });
+      } else {
+        return res.json({
+          status: "fail",
+          msg: "cannot find favorite comic books"
+        });
+      }
+    });
+  }
+);
 
 /**
  * Route: /favorites/add/comic
@@ -15,68 +36,75 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const usersID = req.user.id;
-    const { id: comicID, title, published, description } = req.body;
+    const { comicID, title, published, description } = req.body;
+
     const newComic = {
-      id: comicID,
+      comicID,
       title,
       published,
       description
     };
 
-    let findUsersFavorites = Favorites.findOne({ user: usersID }).exec();
+    Favorites.findOne({ user: usersID }).then(favorites => {
+      if (favorites) {
+        let query = { user: usersID };
 
-    User.findById(usersID)
-      .then(user => {
-        if (user) {
-          // return res.json(user);
-          return findUsersFavorites;
-        }
-      })
-      .then(favorites => {
-        if (favorites) {
-          // favorites.update({
-          //   comics: [...favorites.comics, newComic]
-          // });
-
-          // return res.json({
-          //   status: "success",
-          //   msg: "new comic saved",
-          //   newComic
-          // });
-
-          // Tank.update({ _id: id }, { $set: { size: "large" } }, callback);
-          favorites.update({ comics: [...favorites.comics, newComic] });
-
-          return res.json({
-            msg: "shit",
+        Favorites.findOneAndUpdate(
+          query,
+          {
             comics: [...favorites.comics, newComic]
-          });
-        }
-
-        var comics = [newComic];
-        let newFavoritesCollection = new Favorites({
+          },
+          { new: true }
+        ).then(updatedFavorites => {
+          return res.json(updatedFavorites);
+        });
+      } else {
+        let favorites = new Favorites({
           user: usersID,
-          comics,
+          comics: [newComic],
           characters: []
         });
 
-        return newFavoritesCollection.save();
-      })
-      .then(() => {
-        return res.json({
-          status: "success",
-          msg: "new comic saved",
-          newComic
+        favorites.save().then(newFavorites => {
+          return res.json(newFavorites);
         });
-      })
-      .catch(err => {
-        res.json({ err });
-      });
+      }
+    });
+  }
+);
 
-    // res.json({
-    //   success: true,
-    //   data: req.body
-    // });
+/**
+ * Route: /favorites/delete/comic
+ * Desc: Delete comic from user's collection
+ * Private Route
+ */
+
+router.delete(
+  "/delete/comic",
+
+  passport.authenticate("jwt", { session: false }),
+
+  (req, res) => {
+    const comicID = req.body.comicID;
+    const userID = req.user.id;
+
+    Favorites.findOne({ user: userID }).then(favorites => {
+      if (!favorites) {
+        res.json({ status: "fail", msg: "could not find favorites" });
+      } else {
+        const updatedFavoriteComics = favorites.comics.filter(
+          comic => comic.comicID != comicID
+        );
+
+        Favorites.findOneAndUpdate(
+          { user: userID },
+          { comics: updatedFavoriteComics },
+          { new: true }
+        ).then(updatedComics => {
+          return res.json({ status: "success", updatedComics });
+        });
+      }
+    });
   }
 );
 
