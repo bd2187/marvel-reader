@@ -74,6 +74,46 @@ router.post(
 );
 
 /**
+ * Route: /favorites/add/character
+ * Desc: Add Character to user's collection
+ * Private Route
+ */
+router.post(
+  "/add/character",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const userID = req.user.id;
+    const { characterID, name, dateAdded, thumbnail } = req.body;
+
+    const newCharacter = { characterID, name, dateAdded, thumbnail };
+
+    Favorites.findOne({ user: userID }).then(favorites => {
+      if (favorites) {
+        let query = { user: userID };
+
+        Favorites.findOneAndUpdate(
+          query,
+          { characters: [...favorites.characters, newCharacter] },
+          { new: true }
+        ).then(updatedFavorites => {
+          return res.json(updatedFavorites);
+        });
+      } else {
+        let favorites = new Favorites({
+          user: userID,
+          comics: [],
+          characters: [newCharacter]
+        });
+
+        favorites.save().then(newFavorites => {
+          return res.json(newFavorites);
+        });
+      }
+    });
+  }
+);
+
+/**
  * Route: /favorites/delete/comic
  * Desc: Delete comic from user's collection
  * Private Route
