@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 
-const rootReducer = () => ({
-  sampleProp: "key"
+import userReducer from "./userReducer";
+import profileReducer from "./profileReducer";
+
+const rootReducer = combineReducers({
+  user: userReducer,
+  profile: profileReducer
 });
 
 export default rootReducer;
