@@ -1,4 +1,4 @@
 node_modules
 package-lock.json
-db.js
-keys.js
+/config/db.js
+/config/keys.js
