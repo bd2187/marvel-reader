@@ -12,3 +12,19 @@ const store = createStore(
 );
 
 export default store;
+
+/*
+store structure
+
+  {
+    
+    user: {
+      isLoggedIn: false,
+      userData: {}
+    },
+    profile: {
+      favoriteCharacters: {},
+      favoriteComics: {}
+    }
+  }
+*/

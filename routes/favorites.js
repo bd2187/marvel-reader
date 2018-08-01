@@ -36,7 +36,10 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const usersID = req.user.id;
+    const query = { user: usersID };
     const { comicID, title, published, description } = req.body;
+
+    // TODO: ERROR HANDLING / MISSING FIELDS
 
     const newComic = {
       comicID,
@@ -45,10 +48,10 @@ router.post(
       description
     };
 
-    Favorites.findOne({ user: usersID }).then(favorites => {
-      if (favorites) {
-        let query = { user: usersID };
+    Favorites.findOne(query).then(favorites => {
+      // TODO: CHECK IF COMIC ALREADY EXISTS IN COLLECTION
 
+      if (favorites) {
         Favorites.findOneAndUpdate(
           query,
           {
@@ -56,7 +59,7 @@ router.post(
           },
           { new: true }
         ).then(updatedFavorites => {
-          return res.json(updatedFavorites);
+          return res.json({ comics: updatedFavorites.comics });
         });
       } else {
         let favorites = new Favorites({
@@ -66,7 +69,7 @@ router.post(
         });
 
         favorites.save().then(newFavorites => {
-          return res.json(newFavorites);
+          return res.json({ comics: newFavorites.comics });
         });
       }
     });
@@ -82,31 +85,34 @@ router.post(
   "/add/character",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const userID = req.user.id;
+    const usersID = req.user.id;
+    const query = { user: usersID };
     const { characterID, name, dateAdded, thumbnail } = req.body;
+
+    // TODO: ERROR HANDLING / MISSING FIELDS
 
     const newCharacter = { characterID, name, dateAdded, thumbnail };
 
-    Favorites.findOne({ user: userID }).then(favorites => {
-      if (favorites) {
-        let query = { user: userID };
+    Favorites.findOne(query).then(favorites => {
+      // TODO: CHECK IF COMIC ALREADY EXISTS IN COLLECTION
 
+      if (favorites) {
         Favorites.findOneAndUpdate(
           query,
           { characters: [...favorites.characters, newCharacter] },
           { new: true }
         ).then(updatedFavorites => {
-          return res.json(updatedFavorites);
+          return res.json({ characters: updatedFavorites.characters });
         });
       } else {
         let favorites = new Favorites({
-          user: userID,
+          user: usersID,
           comics: [],
           characters: [newCharacter]
         });
 
         favorites.save().then(newFavorites => {
-          return res.json(newFavorites);
+          return res.json({ characters: newFavorites.characters });
         });
       }
     });
@@ -122,22 +128,26 @@ router.delete(
   "/delete/character",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const userID = req.user.id;
+    const usersID = req.user.id;
+    const query = { user: usersID };
     const { characterID } = req.body;
 
-    Favorites.findOne({ user: userID }).then(favorites => {
+    Favorites.findOne(query).then(favorites => {
       if (!favorites) {
         return res.json({ status: "fail", msg: "could not find favorites" });
       } else {
-        const updatedFavoriteCharacters = favorites.comics.filter(
+        const updatedFavoriteCharacters = favorites.characters.filter(
           character => character.characterID != characterID
         );
         Favorites.findOneAndUpdate(
-          { user: userID },
+          query,
           { characters: updatedFavoriteCharacters },
           { new: true }
         ).then(updatedCharacters => {
-          return res.json({ status: "success", updatedCharacters });
+          return res.json({
+            status: "success",
+            characters: updatedCharacters.characters
+          });
         });
       }
     });
@@ -155,10 +165,11 @@ router.delete(
   passport.authenticate("jwt", { session: false }),
 
   (req, res) => {
+    const usersID = req.user.id;
+    const query = { user: usersID };
     const comicID = req.body.comicID;
-    const userID = req.user.id;
 
-    Favorites.findOne({ user: userID }).then(favorites => {
+    Favorites.findOne(query).then(favorites => {
       if (!favorites) {
         res.json({ status: "fail", msg: "could not find favorites" });
       } else {
@@ -167,11 +178,11 @@ router.delete(
         );
 
         Favorites.findOneAndUpdate(
-          { user: userID },
+          query,
           { comics: updatedFavoriteComics },
           { new: true }
         ).then(updatedComics => {
-          return res.json({ status: "success", updatedComics });
+          return res.json({ status: "success", comics: updatedComics.comics });
         });
       }
     });
