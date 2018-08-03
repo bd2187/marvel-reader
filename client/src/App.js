@@ -7,7 +7,7 @@ import store from "./store";
 import { logInUser } from "./actions";
 
 // Sample dispatch to be removed
-store.dispatch(logInUser());
+store.dispatch(logInUser("danaerys212", "password"));
 
 class App extends Component {
   render() {
