@@ -88,20 +88,25 @@ router.post("/login", function(req, res) {
           id: user._id
         };
 
-        // Sign token with 1 hour expiration date
-        return jwt.sign(payload, key, { expiresIn: 3600000 }, (err, token) => {
-          if (err) {
-            return res.json({
-              status: "fail",
-              err
+        // Sign token with 4 week expiration date
+        return jwt.sign(
+          payload,
+          key,
+          { expiresIn: "4 weeks" },
+          (err, token) => {
+            if (err) {
+              return res.json({
+                status: "fail",
+                err
+              });
+            }
+
+            res.json({
+              status: "success",
+              token: `Bearer ${token}`
             });
           }
-
-          res.json({
-            status: "success",
-            token: `Bearer ${token}`
-          });
-        });
+        );
       });
     })
     .catch(err => {
