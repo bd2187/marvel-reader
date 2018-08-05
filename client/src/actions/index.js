@@ -1,4 +1,4 @@
-import { LOG_IN_USER } from "../constants";
+import { LOG_IN_USER, LOG_OUT_USER } from "../constants";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import setAuthorization from "../utils/setAuthorization";
@@ -17,23 +17,22 @@ export const logInUser = (username, password) => dispatch => {
       // Decode JWT token
       var decoded = jwt_decode(token);
 
-      const { username, email, signUpDate, id } = decoded;
-      dispatch({
-        type: LOG_IN_USER,
-        user: {
-          username,
-          email,
-          signUpDate,
-          id
-        }
-      });
+      // const { username, email, signUpDate, id } = decoded;
+      dispatch(logUserInfo(decoded));
     })
     .catch(function(err) {
       console.log(err);
     });
 };
 
-export const logOutUser = (
+export const logUserInfo = userData => {
+  return {
+    type: LOG_IN_USER,
+    user: userData
+  };
+};
+
+export const registerUser = (
   username,
   password,
   confirmPassword,
@@ -50,9 +49,20 @@ export const logOutUser = (
     })
     .then(res => {
       // redirect user to login page
+      console.log("redirect!");
       return;
     })
     .catch(err => {
-      // do something with err
+      // dispatch error
+      console.log(`Dispatch Error ${err}`);
     });
+};
+
+export const logOutUser = () => {
+  localStorage.removeItem("token");
+  setAuthorization(null);
+
+  return {
+    type: LOG_OUT_USER
+  };
 };
