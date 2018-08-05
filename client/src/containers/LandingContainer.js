@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router";
 
 import { connect } from "react-redux";
 import { logInUser } from "../actions";
@@ -7,13 +8,17 @@ import Landing from "../components/Landing";
 
 class LandingContainer extends Component {
   render() {
-    return <Landing logInUser={this.props.logInUser} user={this.props.user} />;
+    return this.props.isLoggedIn ? (
+      <Redirect to="/dashboard" />
+    ) : (
+      <Landing logInUser={this.props.logInUser} />
+    );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    isLoggedIn: state.user.isLoggedIn
   };
 };
 
