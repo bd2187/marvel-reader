@@ -6,7 +6,7 @@ const Landing = props => {
   return (
     <div>
       <LogIn logInUser={props.logInUser} />
-      <Register registerUser={props.registerUser} />
+      <Register registerUser={props.registerUser} errors={props.errors} />
     </div>
   );
 };
