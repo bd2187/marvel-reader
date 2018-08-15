@@ -20,7 +20,11 @@ const userReducer = (state = initialState, action) => {
       return { ...state, isLoggedIn: false, userData: {}, errors: {} };
 
     case USER_SIGN_UP:
-      return { ...state, userData: { username: action.username }, errors: {} };
+      return {
+        ...state,
+        userData: { username: action.username, signUpSuccess: true },
+        errors: {}
+      };
 
     case USER_SIGN_UP_ERROR:
       return { ...state, errors: { error: true, msg: action.msg } };
