@@ -1,4 +1,9 @@
-import { LOG_IN_USER, LOG_OUT_USER } from "../constants";
+import {
+  LOG_IN_USER,
+  LOG_OUT_USER,
+  USER_SIGN_UP_ERROR,
+  USER_SIGN_UP
+} from "../constants";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import setAuthorization from "../utils/setAuthorization";
@@ -32,29 +37,37 @@ export const logUserInfo = userData => {
   };
 };
 
-export const registerUser = (
-  username,
-  password,
-  confirmPassword,
-  email,
-  confirmEmail
-) => dispatch => {
+export const registerUser = userData => dispatch => {
   axios
     .post("/user/signup", {
-      username,
-      password,
-      confirmPassword,
-      email,
-      confirmEmail
+      username: userData.username,
+      password: userData.password,
+      confirmPassword: userData.confirmPassword,
+      email: userData.email,
+      confirmEmail: userData.confirmEmail
     })
     .then(res => {
-      // redirect user to login page
-      console.log("redirect!");
-      return;
+      const { error, msg, success, username } = res.data;
+
+      if (error) {
+        return dispatch({
+          type: USER_SIGN_UP_ERROR,
+          msg: msg
+        });
+      }
+
+      if (success) {
+        return dispatch({
+          type: USER_SIGN_UP,
+          username
+        });
+      }
     })
     .catch(err => {
-      // dispatch error
-      console.log(`Dispatch Error ${err}`);
+      return dispatch({
+        type: USER_SIGN_UP_ERROR,
+        msg: "There was an error with our signup process. Please try again"
+      });
     });
 };
 
