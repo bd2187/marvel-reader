@@ -15,6 +15,7 @@ class LandingContainer extends Component {
         logInUser={this.props.logInUser}
         errors={this.props.errors}
         registerUser={this.props.registerUser}
+        userData={this.props.userData}
       />
     );
   }
@@ -23,7 +24,8 @@ class LandingContainer extends Component {
 const mapStateToProps = state => {
   return {
     isLoggedIn: state.user.isLoggedIn,
-    errors: state.user.errors
+    errors: state.user.errors,
+    userData: state.user.userData
   };
 };
 
