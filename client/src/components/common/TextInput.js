@@ -23,6 +23,7 @@ class TextInput extends Component {
         placeholder={this.props.placeholder}
         data-input={this.props.dataInput}
         className={this.props.className}
+        id={this.props.id}
         value={this.state.value}
         onChange={this.onChange}
       />
