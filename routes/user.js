@@ -18,8 +18,8 @@ router.post("/signup", (req, res) => {
   const errors = validateUserSignup(req.body);
   const { username, email, password } = req.body;
 
-  if (errors.hasErrors) {
-    return res.json(errors);
+  if (errors.length > 0) {
+    return res.json({ status: "fail", msg: errors });
   }
 
   // Hash Password
@@ -49,7 +49,7 @@ router.post("/signup", (req, res) => {
           const { email, username } = data;
           res.json({ email, username, success: true });
         })
-        .catch(err => res.json({ error: true, msg: err }));
+        .catch(err => res.json({ status: "fail", msg: [err] }));
     });
   });
 });
@@ -70,14 +70,14 @@ router.post("/login", function(req, res) {
     .then(user => {
       // If User doesn't exist, send error message
       if (!user) {
-        return res.json({ status: "fail", msg: "user not found" });
+        return res.json({ status: "fail", msg: ["user not found"] });
       }
 
       // Compare password User's password from req.body to user.password from DB
       bcrypt.compare(password, user.password).then(isMatch => {
         // If password doesn't match, return error message
         if (!isMatch) {
-          return res.json({ status: "fail", msg: "password incorrect" });
+          return res.json({ status: "fail", msg: ["password incorrect"] });
         }
 
         // Create payload
@@ -97,7 +97,7 @@ router.post("/login", function(req, res) {
             if (err) {
               return res.json({
                 status: "fail",
-                err
+                err: [err]
               });
             }
 
