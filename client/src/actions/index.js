@@ -72,9 +72,9 @@ export const registerUser = userData => dispatch => {
       confirmEmail: userData.confirmEmail
     })
     .then(res => {
-      const { error, msg, success, username } = res.data;
+      const { status, msg, success, username } = res.data;
 
-      if (error) {
+      if (status === "fail") {
         return dispatch({
           type: USER_SIGN_UP_ERROR,
           msg: msg
