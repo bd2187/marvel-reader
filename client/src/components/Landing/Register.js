@@ -24,8 +24,6 @@ class Register extends Component {
   }
 
   render() {
-    // console.log(this.props.errors);
-    const { error, msg } = this.props.errors;
     return (
       <div>
         <h1>Sign Up</h1>
@@ -69,7 +67,6 @@ class Register extends Component {
 
           <input type="submit" value="Sign Up" />
         </form>
-        {error ? <p className="error-msg">{msg}</p> : null}
       </div>
     );
   }
