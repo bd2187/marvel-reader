@@ -2,7 +2,8 @@ import {
   LOG_IN_USER,
   LOG_OUT_USER,
   USER_SIGN_UP_ERROR,
-  USER_SIGN_UP
+  USER_SIGN_UP,
+  USER_LOG_IN_ERROR
 } from "../constants";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -12,21 +13,45 @@ export const logInUser = (username, password) => dispatch => {
   axios
     .post("/user/login", { username, password })
     .then(res => {
-      // Save token in local storage
-      const { token } = res.data;
-      localStorage.setItem("token", token);
+      if (res.data.status) {
+        const { token } = res.data;
 
-      // Set auth header
-      setAuthorization(token);
+        // If token is undefined, dispatch an error and immediately return
+        if (!token) {
+          dispatch({
+            type: USER_LOG_IN_ERROR,
+            msg: res.data.msg
+              ? res.data.msg
+              : "Either your username or password is incorrect. Please try again"
+          });
+          return;
+        }
 
-      // Decode JWT token
-      var decoded = jwt_decode(token);
+        // Save token in local storage
+        localStorage.setItem("token", token);
 
-      // const { username, email, signUpDate, id } = decoded;
-      dispatch(logUserInfo(decoded));
+        // Set auth header
+        setAuthorization(token);
+
+        // Decode JWT token
+        var decoded = jwt_decode(token);
+
+        // const { username, email, signUpDate, id } = decoded;
+        dispatch(logUserInfo(decoded));
+      } else {
+        return dispatch({
+          type: USER_LOG_IN_ERROR,
+          msg: res.data.msg
+            ? res.data.msg
+            : "Either your username or password is incorrect. Please try again"
+        });
+      }
     })
     .catch(function(err) {
-      console.log(err);
+      dispatch({
+        type: USER_LOG_IN_ERROR,
+        msg: "There was an error logging you in. Please try again."
+      });
     });
 };
 
