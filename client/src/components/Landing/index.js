@@ -29,7 +29,18 @@ class Landing extends Component {
     }
   }
 
+  renderErrors(msgArr) {
+    return msgArr.map(msg => {
+      return (
+        <p key={msg} className="error-msg">
+          {msg}
+        </p>
+      );
+    });
+  }
+
   render() {
+    const { error, msg } = this.props.errors;
     return (
       <div>
         <button onClick={this.toggleLogIn}>
@@ -41,9 +52,10 @@ class Landing extends Component {
           <Register
             logInUser={this.props.logInUser}
             registerUser={this.props.registerUser}
-            errors={this.props.errors}
           />
         )}
+
+        {error ? this.renderErrors(msg) : null}
       </div>
     );
   }
