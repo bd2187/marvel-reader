@@ -2,7 +2,8 @@ import {
   LOG_IN_USER,
   LOG_OUT_USER,
   USER_SIGN_UP_ERROR,
-  USER_SIGN_UP
+  USER_SIGN_UP,
+  USER_LOG_IN_ERROR
 } from "../constants";
 
 const initialState = {
@@ -27,6 +28,9 @@ const userReducer = (state = initialState, action) => {
       };
 
     case USER_SIGN_UP_ERROR:
+      return { ...state, errors: { error: true, msg: action.msg } };
+
+    case USER_LOG_IN_ERROR:
       return { ...state, errors: { error: true, msg: action.msg } };
 
     default:
