@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TextInput from "../common/TextInput";
-
+import styles from "./Landing.module.css";
+console.log(styles);
 class Register extends Component {
   constructor(props) {
     super(props);

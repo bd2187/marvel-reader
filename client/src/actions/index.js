@@ -3,7 +3,8 @@ import {
   LOG_OUT_USER,
   USER_SIGN_UP_ERROR,
   USER_SIGN_UP,
-  USER_LOG_IN_ERROR
+  USER_LOG_IN_ERROR,
+  ADD_FAVORITE_CHARACTER
 } from "../constants";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -102,5 +103,28 @@ export const logOutUser = () => {
 
   return {
     type: LOG_OUT_USER
+  };
+};
+
+export const addFavoriteCharacter = character => {
+  const { characterID, name, thumbnail } = character;
+  return function(dispatch) {
+    axios
+      .post("/favorites/add/character", {
+        characterID,
+        name,
+        thumbnail
+      })
+      .then(res => {
+        return dispatch({
+          type: ADD_FAVORITE_CHARACTER,
+          favoriteChacters: res
+        });
+      })
+      .catch(err => {
+        // dispatch error here
+        console.log(`err: ${err}`);
+        return;
+      });
   };
 };
