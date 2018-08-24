@@ -66,7 +66,7 @@ class Register extends Component {
             className="registration-input"
           />
 
-          <input type="submit" value="Sign Up" />
+          <input className={styles.button} type="submit" value="Sign Up" />
         </form>
       </div>
     );
