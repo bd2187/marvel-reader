@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import LogIn from "./LogIn";
 import Register from "./Register";
+
+import styles from "./Landing.module.css";
 
 class Landing extends Component {
   constructor(props) {
@@ -42,20 +45,28 @@ class Landing extends Component {
   render() {
     const { error, msg } = this.props.errors;
     return (
-      <div>
-        <button onClick={this.toggleLogIn}>
-          {this.state.login ? "Sign Up" : "Log In"}
-        </button>
-        {this.state.login ? (
-          <LogIn logInUser={this.props.logInUser} />
-        ) : (
-          <Register
-            logInUser={this.props.logInUser}
-            registerUser={this.props.registerUser}
-          />
-        )}
+      <div className={styles.wrap}>
+        <div className={styles["landing-header-container"]}>
+          <Link to="/">Home</Link>
+          <button onClick={this.toggleLogIn} className={styles["toggle-btn"]}>
+            {this.state.login ? "Sign Up" : "Log In"}
+          </button>
+        </div>
 
-        {error ? this.renderErrors(msg) : null}
+        <div className={styles["landing-content-container"]}>
+          {this.state.login ? (
+            <LogIn logInUser={this.props.logInUser} />
+          ) : (
+            <Register
+              logInUser={this.props.logInUser}
+              registerUser={this.props.registerUser}
+            />
+          )}
+        </div>
+
+        <div className={styles["error-container"]}>
+          {error ? this.renderErrors(msg) : null}
+        </div>
       </div>
     );
   }
