@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TextInput from "../common/TextInput";
 import styles from "./Landing.module.css";
-console.log(styles);
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +27,9 @@ class Register extends Component {
   render() {
     return (
       <div>
-        <h1>Sign Up</h1>
+        <div className={styles["title-container"]}>
+          <h1 className={styles.title}>Sign Up</h1>
+        </div>
         <form onSubmit={this.onSubmit} id="registrationForm">
           <TextInput
             type="text"
@@ -66,7 +68,7 @@ class Register extends Component {
             className="registration-input"
           />
 
-          <input className={styles.button} type="submit" value="Sign Up" />
+          <input type="submit" value="Sign Up" />
         </form>
       </div>
     );
