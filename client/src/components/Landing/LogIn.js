@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import styles from "./Landing.module.css";
 
 class LogIn extends Component {
   constructor(props) {
@@ -33,6 +34,10 @@ class LogIn extends Component {
   render() {
     return (
       <div>
+        <div className={styles["title-container"]}>
+          <h1 className={styles.title}>Log in</h1>
+        </div>
+
         <form onSubmit={this.onSubmit}>
           <input
             type="text"
