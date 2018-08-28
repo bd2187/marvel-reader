@@ -26,6 +26,7 @@ class TextInput extends Component {
         id={this.props.id}
         value={this.state.value}
         onChange={this.onChange}
+        autoComplete="off"
       />
     );
   }
