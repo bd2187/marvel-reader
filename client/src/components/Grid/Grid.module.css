@@ -1,0 +1,23 @@
+.wrap {
+  background: #1a2a3b;
+}
+
+.thumbnail-ul {
+  display: flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background: green;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.thumbnail {
+  width: 45%;
+  background: blue;
+  margin: 1em 0;
+}
+
+.thumbnail img {
+  width: 100%;
+}
