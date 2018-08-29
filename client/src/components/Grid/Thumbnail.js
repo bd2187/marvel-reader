@@ -1,10 +1,12 @@
 import React from "react";
+import styles from "./Grid.module.css";
 
 const Thumbnail = props => {
   const { title, thumbnail } = props;
   return (
-    <li>
-      <h4>{title}</h4>
+    <li className={styles.thumbnail}>
+      <div className={styles["thumbnail-overlay"]} />
+      <h4 className={styles["thumbnail-title"]}>{title}</h4>
       <img src={`${thumbnail.path}.${thumbnail.extension}`} />
     </li>
   );

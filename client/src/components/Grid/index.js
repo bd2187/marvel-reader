@@ -1,5 +1,6 @@
 import React from "react";
 import Thumbnail from "./Thumbnail";
+import styles from "./Grid.module.css";
 
 const Grid = props => {
   const { content, loading, title } = props;
@@ -9,17 +10,19 @@ const Grid = props => {
   if (content.length === 0) return <h1>No {title} found</h1>;
 
   return (
-    <ul style={{ display: "flex" }}>
-      {content.map(function(item) {
-        return (
-          <Thumbnail
-            key={item.id}
-            title={item.title}
-            thumbnail={item.thumbnail}
-          />
-        );
-      })}
-    </ul>
+    <div className={styles.wrap}>
+      <ul className={styles["thumbnail-ul"]}>
+        {content.map(function(item) {
+          return (
+            <Thumbnail
+              key={item.id}
+              title={item.title}
+              thumbnail={item.thumbnail}
+            />
+          );
+        })}
+      </ul>
+    </div>
   );
 };
 
