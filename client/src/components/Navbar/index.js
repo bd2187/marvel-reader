@@ -1,25 +1,38 @@
-import React from "react";
+import React, { Component } from "react";
+import HamburgerIcon from "./HamburgerIcon";
 import styles from "./NavBar.module.css";
 
-const toggleNav = e => {
-  console.log(e.target);
-  this.classList.toggle("change");
-};
+class NavBar extends Component {
+  constructor(props) {
+    super(props);
 
-const NavBar = props => {
-  const { user, logOut } = props;
+    this.state = {
+      navbarOpen: false
+    };
 
-  return (
-    <div className={styles["navbar-container"]}>
-      {/* {user.isLoggedIn ? <button onClick={logOut}>logout</button> : null} */}
+    this.toggleNav = this.toggleNav.bind(this);
+  }
 
-      <div className={styles["hamburger-icon"]} onClick={toggleNav}>
-        <div className={styles.bar1} />
-        <div className={styles.bar2} />
-        <div className={styles.bar3} />
+  toggleNav() {
+    this.setState(prevState => {
+      return { navbarOpen: !prevState.navbarOpen };
+    });
+  }
+
+  render() {
+    const { user, logOut } = this.props;
+
+    return (
+      <div className={styles["navbar-container"]}>
+        {/* {user.isLoggedIn ? <button onClick={logOut}>logout</button> : null} */}
+        <HamburgerIcon
+          toggleNav={this.toggleNav}
+          navbarOpen={this.state.navbarOpen}
+        />
+        <p>logo</p>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default NavBar;
