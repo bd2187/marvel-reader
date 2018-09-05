@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import HamburgerIcon from "./HamburgerIcon";
+import SideNav from "./SideNav";
 import styles from "./NavBar.module.css";
 
 class NavBar extends Component {
@@ -19,17 +20,45 @@ class NavBar extends Component {
     });
   }
 
+  componentDidMount() {
+    // Hide or display navigation menu onscroll
+    var prevScrollPos = window.pageYOffset;
+
+    window.onscroll = () => {
+      var currentScrollPos = window.pageYOffset;
+
+      if (prevScrollPos > currentScrollPos) {
+        document.getElementById("navBar").style.top = "0";
+      } else {
+        document.getElementById("navBar").style.top = "-75px";
+
+        this.setState(() => {
+          return { navbarOpen: false };
+        });
+      }
+      prevScrollPos = currentScrollPos;
+    };
+  }
+
   render() {
     const { user, logOut } = this.props;
 
     return (
-      <div className={styles["navbar-container"]}>
-        {/* {user.isLoggedIn ? <button onClick={logOut}>logout</button> : null} */}
-        <HamburgerIcon
-          toggleNav={this.toggleNav}
+      <div>
+        <div className={styles["navbar-container"]} id="navBar">
+          {/* {user.isLoggedIn ? <button onClick={logOut}>logout</button> : null} */}
+          <HamburgerIcon
+            toggleNav={this.toggleNav}
+            navbarOpen={this.state.navbarOpen}
+          />
+          <p>logo</p>
+        </div>
+        <SideNav
           navbarOpen={this.state.navbarOpen}
+          user={user}
+          logOut={logOut}
+          toggleNav={this.toggleNav}
         />
-        <p>logo</p>
       </div>
     );
   }
