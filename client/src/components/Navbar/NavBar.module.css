@@ -10,6 +10,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 0.5em;
+  transition: top 0.3s;
 }
 
 .hamburger-icon,
@@ -55,4 +56,40 @@
 .hamburger-icon.change .bar3 {
   -webkit-transform: rotate(45deg) translate(-8px, -8px);
   transform: rotate(45deg) translate(-8px, -8px);
+}
+
+#sideNav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: red;
+  transition: all 0.5s;
+  overflow-x: hidden;
+  padding-top: 75px;
+  z-index: 9;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.sidenav-open {
+  width: 200px;
+}
+
+.sidenav-close {
+  width: 0;
+}
+
+.sidenav-link {
+  margin: 0.75em auto;
+  width: 80%;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sidenav-link:hover {
+  background: blue;
+  transition: all 0.5s;
 }
