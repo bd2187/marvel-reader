@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import LogIn from "./LogIn";
 import Register from "./Register";
 
@@ -16,10 +15,19 @@ class Landing extends Component {
     this.toggleLogIn = this.toggleLogIn.bind(this);
   }
 
-  toggleLogIn() {
-    this.setState(prevState => {
-      return { login: !prevState.login };
-    });
+  toggleLogIn(loginOrSignUp) {
+    console.log(loginOrSignUp);
+    console.log(this.state.login);
+
+    if (loginOrSignUp === "login") {
+      this.setState(() => {
+        return { login: true };
+      });
+    } else if (loginOrSignUp === "signup") {
+      this.setState(() => {
+        return { login: false };
+      });
+    }
   }
 
   componentDidUpdate() {
@@ -46,14 +54,31 @@ class Landing extends Component {
     const { error, msg } = this.props.errors;
     return (
       <div className={styles.wrap}>
-        <div className={styles["landing-header-container"]}>
-          <Link to="/">Home</Link>
+        {/* <div className={styles["landing-header-container"]}>
           <button onClick={this.toggleLogIn} className={styles["toggle-btn"]}>
             {this.state.login ? "Sign Up" : "Log In"}
           </button>
-        </div>
+        </div> */}
 
         <div className={styles["landing-content-container"]}>
+          <div>
+            <button
+              onClick={this.toggleLogIn.bind(null, "signup")}
+              className={` ${styles["toggle-btn"]}
+                ${!this.state.login ? styles["highlighted-button"] : null}`}
+            >
+              Sign Up
+            </button>
+            or
+            <button
+              onClick={this.toggleLogIn.bind(null, "login")}
+              className={` ${styles["toggle-btn"]}
+              ${this.state.login ? styles["highlighted-button"] : null}`}
+            >
+              Log In
+            </button>
+          </div>
+
           {this.state.login ? (
             <LogIn logInUser={this.props.logInUser} />
           ) : (
