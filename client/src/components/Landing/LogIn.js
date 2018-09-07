@@ -34,10 +34,6 @@ class LogIn extends Component {
   render() {
     return (
       <div>
-        <div className={styles["title-container"]}>
-          <h1 className={styles.title}>Log in</h1>
-        </div>
-
         <form onSubmit={this.onSubmit}>
           <input
             type="text"
@@ -55,7 +51,7 @@ class LogIn extends Component {
             onChange={this.onChange}
           />
 
-          <input type="submit" value="Log In" />
+          <input type="submit" value="Submit" />
         </form>
       </div>
     );

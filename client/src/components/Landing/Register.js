@@ -27,9 +27,6 @@ class Register extends Component {
   render() {
     return (
       <div>
-        <div className={styles["title-container"]}>
-          <h1 className={styles.title}>Sign Up</h1>
-        </div>
         <form onSubmit={this.onSubmit} id="registrationForm">
           <TextInput
             type="text"
@@ -68,7 +65,7 @@ class Register extends Component {
             className="registration-input"
           />
 
-          <input type="submit" value="Sign Up" />
+          <input type="submit" value="Submit" />
         </form>
       </div>
     );
