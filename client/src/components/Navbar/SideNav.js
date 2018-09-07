@@ -33,9 +33,11 @@ const SideNav = props => {
       >
         Characters
       </Link>
-      <span className={styles["sidenav-link"]} onClick={logOut}>
-        LogOut
-      </span>
+      {user.isLoggedIn ? (
+        <span className={styles["sidenav-link"]} onClick={logOut}>
+          LogOut
+        </span>
+      ) : null}
     </div>
   );
 };
