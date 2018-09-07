@@ -10,19 +10,48 @@ class ComicsContainer extends Component {
     super(props);
     this.state = {
       comics: [],
-      loading: true
+      loading: true,
+      dateRange: {}
+    };
+
+    this.getDateRange = this.getDateRange.bind(this);
+  }
+
+  zeroCheck(num) {
+    return num >= 10 ? num : "0" + num;
+  }
+
+  getDateRange(num1, num2) {
+    var today = new Date();
+    var date = this.zeroCheck(today.getDate());
+    var month1 = this.zeroCheck(today.getMonth() - num1 + 1);
+    var month2 = this.zeroCheck(today.getMonth() - num2 + 1);
+    var year = today.getFullYear();
+
+    return {
+      date1: `${year}-${month1}-${date}`,
+      date2: `${year}-${month2}-${date}`
     };
   }
 
   componentDidMount() {
     console.log("fetch comics");
 
+    var dateRangeObj = this.getDateRange(0, 3);
+    var dateRangeStr = `${dateRangeObj.date2}%2C${dateRangeObj.date1}`;
+
     axios
       .get(
-        "http://gateway.marvel.com/v1/public/comics?limit=50&orderBy=title&apikey=7bee794b1db7d98ed6798f95c4bf9865"
+        `http://gateway.marvel.com/v1/public/comics?dateRange=${dateRangeStr}&limit=50&apikey=7bee794b1db7d98ed6798f95c4bf9865`
       )
       .then(res => {
-        this.setState({ comics: res.data.data.results, loading: false });
+        this.setState(prevstate => {
+          return {
+            comics: [...prevstate.comics, ...res.data.data.results],
+            loading: false,
+            dateRange: dateRangeObj
+          };
+        });
       })
       .catch(err => {
         this.setState({ loading: false });
