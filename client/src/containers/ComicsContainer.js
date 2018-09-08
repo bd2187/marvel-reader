@@ -10,15 +10,31 @@ class ComicsContainer extends Component {
     super(props);
     this.state = {
       comics: [],
-      loading: true,
+      loading: false,
       dateRange: {}
     };
 
     this.getDateRange = this.getDateRange.bind(this);
+    this.fetchComics = this.fetchComics.bind(this);
+    this.updateDateRange = this.updateDateRange.bind(this);
   }
 
-  zeroCheck(num) {
-    return num >= 10 ? num : "0" + num;
+  componentDidMount() {
+    var dateRangeObj = this.getDateRange(0, 3);
+
+    this.fetchComics(dateRangeObj);
+
+    document.addEventListener("scroll", () => {
+      if (
+        window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+        !this.state.loading
+      ) {
+        this.updateDateRange();
+
+        // var dateRangeObj = this.getDateRange(0, 3);
+        // this.fetchComics(dateRangeObj);
+      }
+    });
   }
 
   getDateRange(num1, num2) {
@@ -34,10 +50,37 @@ class ComicsContainer extends Component {
     };
   }
 
-  componentDidMount() {
-    console.log("fetch comics");
+  zeroCheck(num) {
+    return num >= 10 ? num : "0" + num;
+  }
 
-    var dateRangeObj = this.getDateRange(0, 3);
+  updateDateRange() {
+    const { date1, date2 } = this.state.dateRange;
+
+    const formatDate = dateStr => {
+      return dateStr
+        .split("-")
+        .map((item, index) => {
+          return index === 1
+            ? this.zeroCheck(Number(dateStr.split("-")[1]) - 1)
+            : item;
+        })
+        .join("-");
+    };
+
+    const updatedDateRange = {
+      date1: formatDate(date1),
+      date2: formatDate(date2)
+    };
+
+    console.log(updatedDateRange);
+
+    // Update Date Range
+
+    this.fetchComics(updatedDateRange);
+  }
+
+  fetchComics(dateRangeObj) {
     var dateRangeStr = `${dateRangeObj.date2}%2C${dateRangeObj.date1}`;
 
     axios
@@ -58,6 +101,7 @@ class ComicsContainer extends Component {
         console.log(err);
       });
   }
+
   render() {
     const { comics, loading } = this.state;
     return <Grid content={comics} loading={loading} title={"comics"} />;
