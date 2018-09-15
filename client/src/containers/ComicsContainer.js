@@ -27,12 +27,10 @@ class ComicsContainer extends Component {
     document.addEventListener("scroll", () => {
       if (
         window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+        this.state.dateRange.date1 &&
         !this.state.loading
       ) {
-        this.updateDateRange();
-
-        // var dateRangeObj = this.getDateRange(0, 3);
-        // this.fetchComics(dateRangeObj);
+        this.fetchComics(this.updateDateRange());
       }
     });
   }
@@ -58,34 +56,33 @@ class ComicsContainer extends Component {
     const { date1, date2 } = this.state.dateRange;
 
     const formatDate = dateStr => {
-      return dateStr
-        .split("-")
-        .map((item, index) => {
-          return index === 1
-            ? this.zeroCheck(Number(dateStr.split("-")[1]) - 1)
-            : item;
-        })
-        .join("-");
+      var dateArr = dateStr.split("-").map((item, index) => {
+        return index === 1
+          ? this.zeroCheck(Number(dateStr.split("-")[1]) - 1)
+          : item;
+      });
+
+      if (dateArr[1] === "00") {
+        dateArr[0] = Number(dateArr[0]) - 1;
+        dateArr[1] = "12";
+      }
+
+      return dateArr.join("-");
     };
 
-    const updatedDateRange = {
+    return {
       date1: formatDate(date1),
       date2: formatDate(date2)
     };
-
-    console.log(updatedDateRange);
-
-    // Update Date Range
-
-    this.fetchComics(updatedDateRange);
   }
 
   fetchComics(dateRangeObj) {
     var dateRangeStr = `${dateRangeObj.date2}%2C${dateRangeObj.date1}`;
+    this.setState({ loading: true });
 
     axios
       .get(
-        `http://gateway.marvel.com/v1/public/comics?dateRange=${dateRangeStr}&limit=50&apikey=7bee794b1db7d98ed6798f95c4bf9865`
+        `https://gateway.marvel.com/v1/public/comics?dateRange=${dateRangeStr}&limit=50&apikey=7bee794b1db7d98ed6798f95c4bf9865`
       )
       .then(res => {
         this.setState(prevstate => {
