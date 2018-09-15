@@ -1,6 +1,9 @@
 .wrap {
   background: #1a2a3b;
   padding-top: 75px;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
 }
 
 .thumbnail-ul {
@@ -47,4 +50,23 @@
 .thumbnail img {
   width: 100%;
   height: 100%;
+}
+
+.loader {
+  border: 13px solid #292929;
+  border-top: 13px solid #1ec49e;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  animation: spin 1s linear infinite;
+  margin: 2em auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
