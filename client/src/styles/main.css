@@ -3,6 +3,11 @@
   font-family: "Noto Sans", sans-serif;
 }
 
+html,
+body {
+  background-color: #1a2a3b;
+}
+
 h1,
 h2,
 h3,
