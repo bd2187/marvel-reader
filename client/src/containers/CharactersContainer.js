@@ -20,15 +20,21 @@ class CharactersContainer extends Component {
   componentDidMount() {
     this.fetchCharacters("a");
 
-    // document.addEventListener('scroll', () => {
-    //   if (
-    //     window.innerHeight + window.scrollyY >= document.body.offsetHeight &&
-    //     // this.state.query &&
-    //     !this.state.loading
-    //   ) {
-    //     this.fetchCharacters(this.updateQuery());
-    //   }
-    // })
+    document.addEventListener("scroll", () => {
+      if (
+        window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+        this.state.query &&
+        !this.state.loading
+      ) {
+        this.fetchCharacters(this.updateQuery());
+      }
+    });
+  }
+
+  updateQuery() {
+    const { query } = this.state;
+    const updatedCharCode = query.charCodeAt() + 1;
+    return String.fromCharCode(updatedCharCode);
   }
 
   fetchCharacters(query) {
