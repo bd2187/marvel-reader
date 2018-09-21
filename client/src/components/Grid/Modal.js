@@ -4,19 +4,17 @@ import styles from "./Grid.module.css";
 const Modal = props => {
   const { content, closeModal } = props;
 
-  console.log(content);
-
   return (
     <div className={styles["modal-overlay"]} onClick={closeModal}>
       <div className={styles["modal-container"]}>
-        <div style={{ width: "50%" }}>
-          <img
-            style={{ width: "100%" }}
-            src={`${content.thumbnail.path}.jpg`}
-            alt={content.title}
-          />
-        </div>
-        <h1>{content.title}</h1>
+        {/* <div style={{ width: "50%" }}> */}
+        <img
+          style={{ width: "50%", display: "block", margin: "1em auto" }}
+          src={`${content.thumbnail.path}.jpg`}
+          alt={content.title}
+        />
+        {/* </div> */}
+        <h3 style={{ textAlign: "center" }}>{content.title}</h3>
         <br />
         <p>{content.description}</p>
         <br />
