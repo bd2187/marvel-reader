@@ -24,6 +24,7 @@ class LogIn extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+
     const { username } = this.state;
     const { password } = this.state;
     const { logInUser } = this.props;
@@ -51,7 +52,11 @@ class LogIn extends Component {
             onChange={this.onChange}
           />
 
-          <input type="submit" value="Submit" />
+          {this.props.loading ? (
+            <input type="submit" value="Loading" disabled />
+          ) : (
+            <input type="submit" value="Submit" />
+          )}
         </form>
       </div>
     );

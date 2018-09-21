@@ -65,7 +65,11 @@ class Register extends Component {
             className="registration-input"
           />
 
-          <input type="submit" value="Submit" />
+          {this.props.loading ? (
+            <input type="submit" value="Loading" disabled />
+          ) : (
+            <input type="submit" value="Submit" />
+          )}
         </form>
       </div>
     );
