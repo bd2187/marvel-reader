@@ -4,13 +4,15 @@ import {
   USER_SIGN_UP_ERROR,
   USER_SIGN_UP,
   USER_LOG_IN_ERROR,
-  ADD_FAVORITE_CHARACTER
+  ADD_FAVORITE_CHARACTER,
+  USER_LOADING
 } from "../constants";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import setAuthorization from "../utils/setAuthorization";
 
 export const logInUser = (username, password) => dispatch => {
+  dispatch({ type: USER_LOADING, loading: true });
   axios
     .post("/user/login", { username, password })
     .then(res => {
@@ -63,39 +65,76 @@ export const logUserInfo = userData => {
   };
 };
 
-export const registerUser = userData => dispatch => {
-  axios
-    .post("/user/signup", {
-      username: userData.username,
-      password: userData.password,
-      confirmPassword: userData.confirmPassword,
-      email: userData.email,
-      confirmEmail: userData.confirmEmail
-    })
-    .then(res => {
-      const { status, msg, success, username } = res.data;
+export const registerUser = function(userData) {
+  return function(dispatch) {
+    dispatch({ type: USER_LOADING, loading: true });
+    axios
+      .post("/user/signup", {
+        username: userData.username,
+        password: userData.password,
+        confirmPassword: userData.confirmPassword,
+        email: userData.email,
+        confirmEmail: userData.confirmEmail
+      })
+      .then(res => {
+        const { status, msg, success, username } = res.data;
 
-      if (status === "fail") {
+        if (status === "fail") {
+          return dispatch({
+            type: USER_SIGN_UP_ERROR,
+            msg: msg
+          });
+        }
+
+        if (success) {
+          return dispatch({
+            type: USER_SIGN_UP,
+            username
+          });
+        }
+      })
+      .catch(err => {
         return dispatch({
           type: USER_SIGN_UP_ERROR,
-          msg: msg
+          msg: "There was an error with our signup process. Please try again"
         });
-      }
-
-      if (success) {
-        return dispatch({
-          type: USER_SIGN_UP,
-          username
-        });
-      }
-    })
-    .catch(err => {
-      return dispatch({
-        type: USER_SIGN_UP_ERROR,
-        msg: "There was an error with our signup process. Please try again"
       });
-    });
+  };
 };
+
+// export const registerUser = userData => dispatch => {
+//   axios
+//     .post("/user/signup", {
+//       username: userData.username,
+//       password: userData.password,
+//       confirmPassword: userData.confirmPassword,
+//       email: userData.email,
+//       confirmEmail: userData.confirmEmail
+//     })
+//     .then(res => {
+//       const { status, msg, success, username } = res.data;
+
+//       if (status === "fail") {
+//         return dispatch({
+//           type: USER_SIGN_UP_ERROR,
+//           msg: msg
+//         });
+//       }
+
+//       if (success) {
+//         return dispatch({
+//           type: USER_SIGN_UP,
+//           username
+//         });
+//       }
+//     })
+//     .catch(err => {
+//       return dispatch({
+//         type: USER_SIGN_UP_ERROR,
+//         msg: "There was an error with our signup process. Please try again"
+//       });
+//     });
+// };
 
 export const logOutUser = () => {
   localStorage.removeItem("token");
