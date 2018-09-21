@@ -16,8 +16,9 @@ class Landing extends Component {
   }
 
   toggleLogIn(loginOrSignUp) {
-    console.log(loginOrSignUp);
-    console.log(this.state.login);
+    // If login or registration ajax requests are still in process,
+    // don't toggle and immediately return
+    if (this.props.loading) return;
 
     if (loginOrSignUp === "login") {
       this.setState(() => {
@@ -52,14 +53,10 @@ class Landing extends Component {
 
   render() {
     const { error, msg } = this.props.errors;
+    const loading = this.props.loading;
+
     return (
       <div className={styles.wrap}>
-        {/* <div className={styles["landing-header-container"]}>
-          <button onClick={this.toggleLogIn} className={styles["toggle-btn"]}>
-            {this.state.login ? "Sign Up" : "Log In"}
-          </button>
-        </div> */}
-
         <div className={styles["landing-content-container"]}>
           <div>
             <button
@@ -80,11 +77,12 @@ class Landing extends Component {
           </div>
 
           {this.state.login ? (
-            <LogIn logInUser={this.props.logInUser} />
+            <LogIn logInUser={this.props.logInUser} loading={loading} />
           ) : (
             <Register
               logInUser={this.props.logInUser}
               registerUser={this.props.registerUser}
+              loading={loading}
             />
           )}
         </div>
