@@ -4,7 +4,7 @@ import {
   USER_SIGN_UP_ERROR,
   USER_SIGN_UP,
   USER_LOG_IN_ERROR,
-  USER_SIGN_UP_LOADING
+  USER_LOADING
 } from "../constants";
 
 const initialState = {
@@ -17,12 +17,24 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOG_IN_USER:
-      return { ...state, isLoggedIn: true, userData: action.user, errors: {} };
+      return {
+        ...state,
+        isLoggedIn: true,
+        userData: action.user,
+        errors: {},
+        loading: false
+      };
 
     case LOG_OUT_USER:
-      return { ...state, isLoggedIn: false, userData: {}, errors: {} };
+      return {
+        ...state,
+        isLoggedIn: false,
+        userData: {},
+        errors: {},
+        loading: false
+      };
 
-    case USER_SIGN_UP_LOADING:
+    case USER_LOADING:
       return { ...state, loading: action.loading };
 
     case USER_SIGN_UP:
