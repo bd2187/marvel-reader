@@ -23,7 +23,7 @@ class Modal extends Component {
       style: {
         width: "calc(70% / 2)",
         height: "calc(80vh / 2)",
-        transition: "transform 1s ease",
+        transition: "transform 0.5s ease",
         transform: "scale(2)"
       }
     });
@@ -34,20 +34,26 @@ class Modal extends Component {
      When user closes the modal, transition the scale of the
      modal container prior to fully closing the modal.
      */
-    this.setState({
-      style: {
-        width: "0",
-        height: "0",
-        transition: "transform 1s ease",
-        transform: "scale(0)"
+
+    [...e.target.classList].forEach(name => {
+      if (
+        name.indexOf("modal-overlay") !== -1 ||
+        name.indexOf("modal-exit-btn") !== -1
+      ) {
+        this.setState({
+          style: {
+            width: "0",
+            height: "0",
+            transition: "transform 0.5s ease",
+            transform: "scale(0)"
+          }
+        });
+
+        setTimeout(() => {
+          this.props.closeModal();
+        }, 300);
       }
     });
-
-    var eventTarget = e.target;
-
-    setTimeout(() => {
-      this.props.closeModal(eventTarget);
-    }, 300);
   }
 
   render() {
@@ -55,20 +61,32 @@ class Modal extends Component {
 
     return (
       <div
-        className={styles["modal-overlay"]}
+        className={`${styles["modal-overlay"]}`}
         onClick={e => this.unMountStyle(e)}
       >
         <div className={styles["modal-container"]} style={this.state.style}>
-          <img
-            style={{ width: "50%", display: "block", margin: "1em auto" }}
-            src={`${content.thumbnail.path}.jpg`}
-            alt={content.title}
-          />
-          <h3 style={{ textAlign: "center" }}>{content.title}</h3>
-          <br />
-          <p>{content.description}</p>
-          <br />
-          <p>Published: {content.dates[0].date}</p>
+          <span
+            className={styles["modal-exit-btn"]}
+            onClick={e => this.unMountStyle(e)}
+          >
+            X
+          </span>
+          <div className={styles["modal-overflow"]}>
+            <img
+              className={styles["comic-cover"]}
+              src={`${content.thumbnail.path}.jpg`}
+              alt={content.title}
+            />
+            <h3 style={{ textAlign: "center", fontSize: "14px" }}>
+              {content.title}
+            </h3>
+            <br />
+            <p>{content.description}</p>
+            <br />
+            <p style={{ fontSize: "11px" }}>
+              Published: {content.dates[0].date}
+            </p>
+          </div>
         </div>
       </div>
     );
