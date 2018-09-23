@@ -21,13 +21,8 @@ class Grid extends Component {
     this.setState(() => ({ modalOpen: true, activeData: data }));
   }
 
-  closeModal(evt) {
-    // todo: add condition for evt
-    [...evt.target.classList].forEach(name => {
-      return name.indexOf("modal-overlay") !== -1
-        ? this.setState(() => ({ modalOpen: false, activeData: {} }))
-        : null;
-    });
+  closeModal() {
+    return this.setState(() => ({ modalOpen: false, activeData: {} }));
   }
 
   render() {
