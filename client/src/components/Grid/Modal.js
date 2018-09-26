@@ -5,11 +5,15 @@ class Modal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      style: {}
+      style: {},
+      description: "",
+      shortenedDescription: "",
+      showShortDescription: false
     };
 
     this.mountStyle = this.mountStyle.bind(this);
     this.unMountStyle = this.unMountStyle.bind(this);
+    this.displayDescription = this.displayDescription.bind(this);
   }
 
   componentDidMount() {
@@ -17,23 +21,53 @@ class Modal extends Component {
     setTimeout(this.mountStyle, 10);
   }
 
+  /**
+   *
+   *  Responsible for scaling the modal once open. Also responsible
+   *  for storing a short version of the content's description
+   *  inside the component's state
+   *
+   *  @param
+   *  @return
+   *
+   */
   mountStyle() {
     // These style scales the modal container to size while in a transition
-    this.setState({
-      style: {
-        width: "calc(70% / 2)",
-        height: "calc(80vh / 2)",
-        transition: "transform 0.5s ease",
-        transform: "scale(2)"
-      }
-    });
+    const style = {
+      width: "calc(70% / 2)",
+      height: "calc(80vh / 2)",
+      transition: "transform 0.5s ease",
+      transform: "scale(2)"
+    };
+
+    /*
+      If the content's description is more than 250 characters long,
+      include a short version of the description in the component's state.
+      Otherwise, don't include a short version
+    */
+    if (this.props.content.description.split("").length > 250) {
+      let shortenedDescription =
+        this.props.content.description
+          .split("")
+          .slice(0, 250)
+          .join("") + "...";
+
+      this.setState({
+        description: this.props.content.description,
+        showShortDescription: true,
+        shortenedDescription,
+        style
+      });
+    } else {
+      this.setState({ description: this.props.content.description, style });
+    }
   }
 
   unMountStyle(e) {
     /*
      When user closes the modal, transition the scale of the
      modal container prior to fully closing the modal.
-     */
+    */
 
     [...e.target.classList].forEach(name => {
       if (
@@ -54,6 +88,43 @@ class Modal extends Component {
         }, 300);
       }
     });
+  }
+
+  /**
+   *
+   *  Dictates whether or not the short description for the content
+   *  should be displayed
+   *
+   *  @param
+   *  @return
+   *
+   */
+  displayDescription() {
+    if (this.state.showShortDescription) {
+      return (
+        <div>
+          <p>{this.state.shortenedDescription}</p>
+          <button
+            onClick={() => this.setState({ showShortDescription: false })}
+          >
+            More
+          </button>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p>{this.state.description}</p>
+          {this.state.shortenedDescription ? (
+            <button
+              onClick={() => this.setState({ showShortDescription: true })}
+            >
+              Less
+            </button>
+          ) : null}
+        </div>
+      );
+    }
   }
 
   render() {
@@ -81,9 +152,9 @@ class Modal extends Component {
               {content.title}
             </h3>
             <br />
-            <p>{content.description}</p>
+            {this.displayDescription()}
             <br />
-            <p style={{ fontSize: "11px" }}>
+            <p style={{ fontSize: "7px" }}>
               Published: {content.dates[0].date}
             </p>
           </div>
