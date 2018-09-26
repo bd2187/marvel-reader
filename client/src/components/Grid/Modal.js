@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import styles from "./Grid.module.css";
 
 class Modal extends Component {
@@ -45,7 +46,10 @@ class Modal extends Component {
       include a short version of the description in the component's state.
       Otherwise, don't include a short version
     */
-    if (this.props.content.description.split("").length > 250) {
+    if (
+      this.props.content.description &&
+      this.props.content.description.split("").length > 250
+    ) {
       let shortenedDescription =
         this.props.content.description
           .split("")
@@ -103,8 +107,11 @@ class Modal extends Component {
     if (this.state.showShortDescription) {
       return (
         <div>
-          <p>{this.state.shortenedDescription}</p>
+          <p className={styles["content-description"]}>
+            {this.state.shortenedDescription}
+          </p>
           <button
+            className={styles["toggle-description-btn"]}
             onClick={() => this.setState({ showShortDescription: false })}
           >
             More
@@ -114,9 +121,12 @@ class Modal extends Component {
     } else {
       return (
         <div>
-          <p>{this.state.description}</p>
+          <p className={styles["content-description"]}>
+            {this.state.description}
+          </p>
           {this.state.shortenedDescription ? (
             <button
+              className={styles["toggle-description-btn"]}
               onClick={() => this.setState({ showShortDescription: true })}
             >
               Less
@@ -125,6 +135,36 @@ class Modal extends Component {
         </div>
       );
     }
+  }
+
+  displayCharactersComics(charactersComics) {
+    const fetchStuff = url => {
+      axios
+        .get(
+          `${url.replace(
+            "http",
+            "https"
+          )}?apikey=7bee794b1db7d98ed6798f95c4bf9865`
+        )
+        .then(res => console.log(res.data.data.results[0]))
+        .catch(err => console.log(err));
+    };
+
+    return (
+      <ul>
+        {charactersComics.map(comic => {
+          return (
+            <li
+              style={{ fontSize: "7px" }}
+              key={comic.name}
+              onClick={fetchStuff.bind(null, comic.resourceURI)}
+            >
+              {comic.name}
+            </li>
+          );
+        })}
+      </ul>
+    );
   }
 
   render() {
@@ -146,17 +186,22 @@ class Modal extends Component {
             <img
               className={styles["comic-cover"]}
               src={`${content.thumbnail.path}.jpg`}
-              alt={content.title}
+              alt={content.title || content.name}
             />
             <h3 style={{ textAlign: "center", fontSize: "14px" }}>
-              {content.title}
+              {content.title || content.name}
             </h3>
             <br />
             {this.displayDescription()}
             <br />
-            <p style={{ fontSize: "7px" }}>
-              Published: {content.dates[0].date}
-            </p>
+            {content.dates ? (
+              <p style={{ fontSize: "7px" }}>
+                Published: {content.dates[0].date}
+              </p>
+            ) : null}
+            {content.comics && content.comics.items
+              ? this.displayCharactersComics(content.comics.items)
+              : null}
           </div>
         </div>
       </div>
