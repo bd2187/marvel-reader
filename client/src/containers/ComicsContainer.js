@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
 
@@ -101,14 +102,24 @@ class ComicsContainer extends Component {
 
   render() {
     const { comics, loading } = this.state;
-    return <Grid content={comics} loading={loading} title={"comics"} />;
+    // console.log(this.props.match.params.id);
+    return (
+      <Grid
+        content={comics}
+        loading={loading}
+        title={"comics"}
+        searchedItemID={this.props.match.params.id}
+        history={this.props.history}
+      />
+    );
   }
 }
 
+// todo: map action for favoriting comic
 const mapDispatchToProps = dispatch => {
   return {};
 };
 export default connect(
   null,
   mapDispatchToProps
-)(ComicsContainer);
+)(withRouter(ComicsContainer));
