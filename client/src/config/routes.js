@@ -14,8 +14,9 @@ const routes = (
       <NavBarContainer />
       <Switch>
         <Route exact path="/" component={LandingContainer} />
-        <Route exact path="/comics" component={ComicsContainer} />
-        <Route exact path="/characters" component={CharactersContainer} />
+        <Route exact path="/comics/" component={ComicsContainer} />
+        <Route exact path="/comics/:id" component={ComicsContainer} />
+        <Route exact path="/characters/" component={CharactersContainer} />
         <PrivateRouteContainer
           path="/dashboard"
           component={DashboardContainer}
