@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styles from "./Grid.module.css";
 
 const Thumbnail = props => {
@@ -14,15 +15,17 @@ const Thumbnail = props => {
   };
 
   return (
-    <li
-      className={styles.thumbnail}
-      style={backgroundImg}
-      onClick={openModal.bind(null, data)}
-    >
-      <div className={styles["thumbnail-overlay"]} />
-      <h4 className={styles["thumbnail-title"]}>{title}</h4>
-      {/* // <img src={`${thumbnail.path}.${thumbnail.extension}`} alt={title} /> */}
-    </li>
+    <Link to={`/comics/${data.id}`}>
+      <li
+        className={styles.thumbnail}
+        style={backgroundImg}
+        onClick={openModal.bind(null, data)}
+      >
+        <div className={styles["thumbnail-overlay"]} />
+        <h4 className={styles["thumbnail-title"]}>{title}</h4>
+        {/* // <img src={`${thumbnail.path}.${thumbnail.extension}`} alt={title} /> */}
+      </li>
+    </Link>
   );
 };
 
