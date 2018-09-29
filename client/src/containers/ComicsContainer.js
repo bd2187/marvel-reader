@@ -102,7 +102,7 @@ class ComicsContainer extends Component {
 
   render() {
     const { comics, loading } = this.state;
-    // console.log(this.props.match.params.id);
+
     return (
       <Grid
         content={comics}
@@ -110,6 +110,7 @@ class ComicsContainer extends Component {
         title={"comics"}
         searchedItemID={this.props.match.params.id}
         history={this.props.history}
+        path={this.props.match.path}
       />
     );
   }
