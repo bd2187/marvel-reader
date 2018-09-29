@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import styles from "./Grid.module.css";
 
 import Thumbnail from "./Thumbnail";
@@ -17,17 +18,85 @@ class Grid extends Component {
     this.closeModal = this.closeModal.bind(this);
   }
 
+  /**
+   *
+   *  If the id query param isn't passed, immediately return.
+   *  Otherwise, fetch the content data with the id passed
+   *  into webservice's endpoint.
+   *
+   *  @param
+   *  @return
+   */
+  componentDidMount() {
+    if (!this.props.searchedItemID) return;
+
+    axios
+      .get(
+        `https://gateway.marvel.com:443/v1/public/comics/${
+          this.props.searchedItemID
+        }?apikey=7bee794b1db7d98ed6798f95c4bf9865`
+      )
+      .then(res => {
+        this.openModal(res.data.data.results[0]);
+      });
+  }
+
+  /**
+   *
+   *  If the component updates and an id query param is passed in
+   *  the component's props object, search for the content
+   *  based off the ID.
+   *
+   *  @param Object prevProps
+   *  @return
+   *
+   */
+  componentDidUpdate(prevProps) {
+    if (!this.props.searchedItemID) return;
+
+    if (
+      this.props.searchedItemID &&
+      prevProps.searchedItemID !== this.props.searchedItemID
+    ) {
+      axios
+        .get(
+          `https://gateway.marvel.com:443/v1/public/comics/${
+            this.props.searchedItemID
+          }?apikey=7bee794b1db7d98ed6798f95c4bf9865`
+        )
+        .then(res => {
+          this.openModal(res.data.data.results[0]);
+        });
+    }
+  }
+
+  /**
+   *
+   *  Opens modal with activeData object
+   *
+   *  @param Object data
+   *  @return
+   */
   openModal(data) {
     this.setState(() => ({ modalOpen: true, activeData: data }));
   }
 
+  /**
+   *
+   *  Closes modal and pushes "/comics/" into url history
+   *
+   *  @param
+   *  @return
+   */
   closeModal() {
+    this.props.history.push("/comics/");
     return this.setState(() => ({ modalOpen: false, activeData: {} }));
   }
 
   render() {
     const { content, loading, title } = this.props;
     const { modalOpen, activeData } = this.state;
+
     return (
       <div className={styles.wrap}>
         {content.length === 0 && !loading ? <h1>No {title} found</h1> : null}
@@ -45,7 +114,12 @@ class Grid extends Component {
             );
           })}
         </ul>
-        {modalOpen ? (
+
+        {/*
+          If modalOpen is true and the url path does not consist of
+          an id param in the query string, render the Modal component
+        */}
+        {modalOpen && this.props.path !== "/comics/" ? (
           <Modal content={activeData} closeModal={this.closeModal} />
         ) : null}
         {loading ? <div className={styles.loader} /> : null}
