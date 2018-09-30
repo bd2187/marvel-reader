@@ -17,6 +17,7 @@ const routes = (
         <Route exact path="/comics/" component={ComicsContainer} />
         <Route exact path="/comics/:id" component={ComicsContainer} />
         <Route exact path="/characters/" component={CharactersContainer} />
+        <Route exact path="/characters/:id" component={CharactersContainer} />
         <PrivateRouteContainer
           path="/dashboard"
           component={DashboardContainer}
