@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./Grid.module.css";
 
 const Thumbnail = props => {
-  const { title, thumbnail, openModal, data } = props;
+  const { title, categoryTitle, thumbnail, openModal, data } = props;
 
   const backgroundImg = {
     backgroundImage: `url("${thumbnail.path}.${thumbnail.extension}")`,
@@ -15,7 +15,13 @@ const Thumbnail = props => {
   };
 
   return (
-    <Link to={`/comics/${data.id}`}>
+    <Link
+      to={
+        categoryTitle === "comics"
+          ? `/comics/${data.id}`
+          : `/characters/${data.id}`
+      }
+    >
       <li
         className={styles.thumbnail}
         style={backgroundImg}
