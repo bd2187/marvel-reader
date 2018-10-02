@@ -1,4 +1,4 @@
-import { ADD_FAVORITE_CHARACTER } from "../constants";
+import { ADD_FAVORITE_COMIC, ADD_FAVORITE_CHARACTER } from "../constants";
 
 const initialState = {
   favoriteCharacters: {},
@@ -7,6 +7,11 @@ const initialState = {
 
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ADD_FAVORITE_COMIC:
+      return {
+        ...state,
+        favoriteComics: action.favoriteComics
+      };
     case ADD_FAVORITE_CHARACTER:
       return {
         ...state,
