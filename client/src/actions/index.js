@@ -5,6 +5,7 @@ import {
   USER_SIGN_UP,
   USER_LOG_IN_ERROR,
   ADD_FAVORITE_CHARACTER,
+  ADD_FAVORITE_COMIC,
   USER_LOADING
 } from "../constants";
 import axios from "axios";
@@ -142,6 +143,26 @@ export const logOutUser = () => {
 
   return {
     type: LOG_OUT_USER
+  };
+};
+
+export const addFavoriteComic = comic => {
+  // dispatch({type: ADD_FAVORITE_COMIC: payload: comic})
+  const { comicID, title, published, description } = comic;
+
+  return function(dispatch) {
+    axios
+      .post("/favorites/add/comic", { comicID, title, published, description })
+      .then(res => {
+        return dispatch({
+          type: ADD_FAVORITE_COMIC,
+          favoriteComics: res
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        return;
+      });
   };
 };
 
