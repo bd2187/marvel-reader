@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
+import { addFavoriteComic } from "../actions";
 
 import Grid from "../components/Grid";
 
@@ -191,16 +192,27 @@ class ComicsContainer extends Component {
         searchedItemID={this.props.match.params.id}
         history={this.props.history}
         path={this.props.match.path}
+        addFavorite={this.props.addFavoriteComic}
+        isLoggedIn={this.props.isLoggedIn}
       />
     );
   }
 }
 
-// todo: map action for favoriting comic
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.user.isLoggedIn
+  };
+};
+
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    addFavoriteComic: function(comic) {
+      return dispatch(addFavoriteComic(comic));
+    }
+  };
 };
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withRouter(ComicsContainer));
