@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
-import { addFavoriteComic } from "../actions";
+import { addFavoriteComic, getAllComics } from "../actions";
 
 import Grid from "../components/Grid";
 
@@ -37,6 +37,7 @@ class ComicsContainer extends Component {
     var dateRangeObj = this.getDateRange(0, 3);
 
     this.fetchComics(dateRangeObj);
+    this.props.fetchFavoriteComics();
 
     document.addEventListener("scroll", this.handleScroll);
   }
@@ -193,6 +194,7 @@ class ComicsContainer extends Component {
         history={this.props.history}
         path={this.props.match.path}
         addFavorite={this.props.addFavoriteComic}
+        favorites={this.props.favoriteComics}
         isLoggedIn={this.props.isLoggedIn}
       />
     );
@@ -201,7 +203,8 @@ class ComicsContainer extends Component {
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    favoriteComics: state.profile.favoriteComics
   };
 };
 
@@ -209,6 +212,9 @@ const mapDispatchToProps = dispatch => {
   return {
     addFavoriteComic: function(comic) {
       return dispatch(addFavoriteComic(comic));
+    },
+    fetchFavoriteComics: function() {
+      return dispatch(getAllComics());
     }
   };
 };
