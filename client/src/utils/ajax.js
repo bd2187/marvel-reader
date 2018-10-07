@@ -13,22 +13,39 @@ import setAuthorization from "./setAuthorization";
  *
  *  @return
  */
-function ajax(endpoint, data, cb) {
+function ajax(method, endpoint, data, cb) {
   var token = localStorage.getItem("token");
 
   setAuthorization(token);
 
-  axios
-    .post(endpoint, data)
-    .then(res => {
-      setAuthorization(null);
+  if (method === "post") {
+    axios
+      .post(endpoint, data)
+      .then(res => {
+        setAuthorization(null);
 
-      cb(res);
-    })
-    .catch(err => {
-      console.error(err);
-      return;
-    });
+        cb(res);
+      })
+      .catch(err => {
+        handleErr(err);
+      });
+  } else {
+    axios
+      .get(endpoint)
+      .then(res => {
+        setAuthorization(null);
+        cb(res);
+      })
+      .catch(err => {
+        handleErr(err);
+      });
+  }
+}
+
+function handleErr(err) {
+  console.log("Ajax error");
+  console.error(err);
+  setAuthorization(null);
 }
 
 export default ajax;
