@@ -29,6 +29,16 @@ function ajax(method, endpoint, data, cb) {
       .catch(err => {
         handleErr(err);
       });
+  } else if (method === "delete") {
+    axios
+      .delete(endpoint)
+      .then(res => {
+        setAuthorization(null);
+        cb(res);
+      })
+      .catch(err => {
+        handleErr(err);
+      });
   } else {
     axios
       .get(endpoint)
