@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
-import { addFavoriteComic, getAllComics } from "../actions";
+import {
+  addFavoriteComic,
+  deleteFavoriteComic,
+  getAllComics
+} from "../actions";
 
 import Grid from "../components/Grid";
 
@@ -194,6 +198,7 @@ class ComicsContainer extends Component {
         history={this.props.history}
         path={this.props.match.path}
         addFavorite={this.props.addFavoriteComic}
+        deleteFavorite={this.props.deleteFavoriteComic}
         favorites={this.props.favoriteComics}
         isLoggedIn={this.props.isLoggedIn}
       />
@@ -212,6 +217,9 @@ const mapDispatchToProps = dispatch => {
   return {
     addFavoriteComic: function(comic) {
       return dispatch(addFavoriteComic(comic));
+    },
+    deleteFavoriteComic: function(comicID) {
+      return dispatch(deleteFavoriteComic(comicID));
     },
     fetchFavoriteComics: function() {
       return dispatch(getAllComics());
