@@ -81,16 +81,22 @@
 }
 
 .heart-container {
-  text-align: center;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
 
-  display: inline-flex;
-  flex-direction: column;
+  display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 
   border-radius: 100%;
+
+  position: absolute;
+  top: -10px;
+  left: -10px;
+
+  transition: all 0.3s ease-in-out;
 }
 
 .non-favorite {
@@ -107,6 +113,16 @@
 
 .favorite i {
   color: #7f0606;
+}
+
+.publication-date-display {
+  font-size: 7px;
+  text-align: center;
+}
+
+.content-title {
+  font-size: 14px;
+  text-align: center;
 }
 
 .modal-exit-btn {
@@ -139,10 +155,16 @@
   border: none;
 }
 
-.comic-cover {
+.img-container {
+  background: red;
   width: 75%;
   display: block;
   margin: 1em auto;
+  position: relative;
+}
+
+.comic-cover {
+  width: 100%;
 }
 
 .loader {
