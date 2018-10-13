@@ -10,6 +10,8 @@ import {
 
 import Grid from "../components/Grid";
 
+import { zeroCheck } from "../utils/dates";
+
 // import favorites actions
 
 class ComicsContainer extends Component {
@@ -92,32 +94,21 @@ class ComicsContainer extends Component {
   getDateRange(num1, num2) {
     // Get today's date
     var today = new Date();
-    var date = this.zeroCheck(today.getDate());
+    var date = zeroCheck(today.getDate());
 
     /*
       Get the month based off the integers passed in the params.
       (i.e 0 => This month)
       (i.e 3 => 3 months ago)
     */
-    var month1 = this.zeroCheck(today.getMonth() - num1 + 1);
-    var month2 = this.zeroCheck(today.getMonth() - num2 + 1);
+    var month1 = zeroCheck(today.getMonth() - num1 + 1);
+    var month2 = zeroCheck(today.getMonth() - num2 + 1);
     var year = today.getFullYear();
 
     return {
       date1: `${year}-${month1}-${date}`,
       date2: `${year}-${month2}-${date}`
     };
-  }
-
-  /**
-   *
-   *  If a number is less than 10, a 0 is prepended to the integer.
-   *
-   *  @param Number (num)
-   *  @return String
-   */
-  zeroCheck(num) {
-    return num >= 10 ? num : "0" + num;
   }
 
   /**
@@ -136,7 +127,7 @@ class ComicsContainer extends Component {
     const formatDate = dateStr => {
       var dateArr = dateStr.split("-").map((item, index) => {
         return index === 1
-          ? this.zeroCheck(Number(dateStr.split("-")[1]) - 1)
+          ? zeroCheck(Number(dateStr.split("-")[1]) - 1)
           : item;
       });
 
