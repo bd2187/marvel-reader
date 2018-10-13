@@ -12,7 +12,7 @@ const favoritesSchema = new Schema({
       title: { type: String, required: true },
       dateAdded: { type: Date, default: Date.now },
       published: { type: Date, required: true },
-      description: { type: String, required: true }
+      description: { type: String }
     }
   ],
   characters: [
