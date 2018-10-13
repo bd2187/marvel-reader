@@ -15,6 +15,7 @@ class Modal extends Component {
     this.mountStyle = this.mountStyle.bind(this);
     this.unMountStyle = this.unMountStyle.bind(this);
     this.displayDescription = this.displayDescription.bind(this);
+    this.handleFavorite = this.handleFavorite.bind(this);
   }
 
   componentDidMount() {
@@ -167,8 +168,58 @@ class Modal extends Component {
     );
   }
 
+  /**
+   *
+   *  Renders the favorite button and determines
+   *  whether or not to delete/add the content
+   *  to the users favorites list. Dispatches
+   *  addFavorite and deleteFavorite fns
+   *
+   *  @param Object content
+   *  @param  Array favorites
+   *  @return Object React element
+   *
+   */
+  handleFavorite(content, favorites) {
+    var isFavorite;
+    var { addFavorite, deleteFavorite } = this.props;
+
+    // Determine if the content is already in the user's favorites
+    if (favorites && favorites.length > 0) {
+      var filteredFavorites = favorites.filter(function(item) {
+        return Number(item.comicID) === Number(content.id) ? item : null;
+      });
+
+      isFavorite = filteredFavorites.length > 0;
+    }
+
+    return (
+      <div
+        className={`${styles["heart-container"]} ${
+          isFavorite ? styles["favorite"] : styles["non-favorite"]
+        }`}
+        /*
+          If isFavorite is true, have the cb fn invoke deleteFavorite. Otherwise,
+          invoke addFavorite
+        */
+        onClick={() => {
+          return isFavorite
+            ? deleteFavorite(content.id)
+            : addFavorite({
+                comicID: content.id,
+                title: content.title,
+                published: content.dates[0].date,
+                description: content.description
+              });
+        }}
+      >
+        <i className="fa fa-heart" />
+      </div>
+    );
+  }
+
   render() {
-    const { content } = this.props;
+    const { content, isLoggedIn, favorites } = this.props;
 
     return (
       <div
@@ -202,6 +253,9 @@ class Modal extends Component {
             {content.comics && content.comics.items
               ? this.displayCharactersComics(content.comics.items)
               : null}
+
+            {/* If the user is logged in, render the favorite button*/}
+            {isLoggedIn ? this.handleFavorite(content, favorites) : null}
           </div>
         </div>
       </div>
