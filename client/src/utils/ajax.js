@@ -31,7 +31,7 @@ function ajax(method, endpoint, data, cb) {
       });
   } else if (method === "delete") {
     axios
-      .delete(endpoint)
+      .delete(endpoint, data)
       .then(res => {
         setAuthorization(null);
         cb(res);
