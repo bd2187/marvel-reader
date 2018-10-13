@@ -80,6 +80,35 @@
   overflow-y: scroll;
 }
 
+.heart-container {
+  text-align: center;
+  width: 25px;
+  height: 25px;
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 100%;
+}
+
+.non-favorite {
+  background-color: #c4c4c4;
+}
+
+.non-favorite i {
+  color: #6b6b6b;
+}
+
+.favorite {
+  background-color: #bf0a0a;
+}
+
+.favorite i {
+  color: #7f0606;
+}
+
 .modal-exit-btn {
   text-align: center;
   width: 15px;
