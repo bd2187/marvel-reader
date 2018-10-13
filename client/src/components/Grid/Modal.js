@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import styles from "./Grid.module.css";
 
+import { Months, zeroCheck } from "../../utils/dates";
+
 class Modal extends Component {
   constructor(props) {
     super(props);
@@ -170,6 +172,28 @@ class Modal extends Component {
 
   /**
    *
+   * Displays publiciation date for comics
+   *
+   * @param Array dates
+   * @return Object React element
+   *
+   */
+  displayDate(dates) {
+    var d = new Date(dates[0].date);
+
+    const dateToDisplay = `${Months[d.getUTCMonth()]} ${zeroCheck(
+      d.getUTCDate()
+    )}, ${d.getUTCFullYear()}`;
+
+    return (
+      <p className={styles["publication-date-display"]}>
+        Published: {dateToDisplay}
+      </p>
+    );
+  }
+
+  /**
+   *
    *  Renders the favorite button and determines
    *  whether or not to delete/add the content
    *  to the users favorites list. Dispatches
@@ -234,28 +258,25 @@ class Modal extends Component {
             X
           </span>
           <div className={styles["modal-overflow"]}>
-            <img
-              className={styles["comic-cover"]}
-              src={`${content.thumbnail.path}.jpg`}
-              alt={content.title || content.name}
-            />
-            <h3 style={{ textAlign: "center", fontSize: "14px" }}>
+            <div className={styles["img-container"]}>
+              {/* If the user is logged in, render the favorite button*/}
+              {isLoggedIn ? this.handleFavorite(content, favorites) : null}
+              <img
+                className={styles["comic-cover"]}
+                src={`${content.thumbnail.path}.jpg`}
+                alt={content.title || content.name}
+              />
+            </div>
+            <h3 className={styles["content-title"]}>
               {content.title || content.name}
             </h3>
             <br />
             {this.displayDescription()}
             <br />
-            {content.dates ? (
-              <p style={{ fontSize: "7px" }}>
-                Published: {content.dates[0].date}
-              </p>
-            ) : null}
+            {content.dates ? this.displayDate(content.dates) : null}
             {content.comics && content.comics.items
               ? this.displayCharactersComics(content.comics.items)
               : null}
-
-            {/* If the user is logged in, render the favorite button*/}
-            {isLoggedIn ? this.handleFavorite(content, favorites) : null}
           </div>
         </div>
       </div>
