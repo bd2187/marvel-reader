@@ -87,7 +87,7 @@ router.post(
   (req, res) => {
     const usersID = req.user.id;
     const query = { user: usersID };
-    const { characterID, name, dateAdded, thumbnail } = req.body;
+    const { characterID, name, thumbnail } = req.body;
 
     // TODO: ERROR HANDLING / MISSING FIELDS
 
