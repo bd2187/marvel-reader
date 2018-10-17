@@ -32,7 +32,7 @@ class Grid extends Component {
 
     axios
       .get(
-        `https://gateway.marvel.com:443/v1/public/comics/${
+        `https://gateway.marvel.com:443/v1/public/${this.props.title}/${
           this.props.searchedItemID
         }?apikey=7bee794b1db7d98ed6798f95c4bf9865`
       )
@@ -55,7 +55,7 @@ class Grid extends Component {
     if (!this.props.searchedItemID) return;
 
     if (
-      this.props.searchedItemID &&
+      this.props.title === "comics" &&
       prevProps.searchedItemID !== this.props.searchedItemID
     ) {
       axios
@@ -63,6 +63,23 @@ class Grid extends Component {
           `https://gateway.marvel.com:443/v1/public/comics/${
             this.props.searchedItemID
           }?apikey=7bee794b1db7d98ed6798f95c4bf9865`
+        )
+        .then(res => {
+          this.openModal(res.data.data.results[0]);
+        });
+    }
+
+    if (
+      this.props.title === "characters" &&
+      prevProps.searchedItemID !== this.props.searchedItemID
+    ) {
+      axios
+        .get(
+          `
+          https://gateway.marvel.com:443/v1/public/characters/${
+            this.props.searchedItemID
+          }?apikey=7bee794b1db7d98ed6798f95c4bf9865
+          `
         )
         .then(res => {
           this.openModal(res.data.data.results[0]);
@@ -83,18 +100,29 @@ class Grid extends Component {
 
   /**
    *
-   *  Closes modal and pushes "/comics/" into url history
+   *  Closes modal and pushes "/comics/" or "/characters" into url history
    *
    *  @param
    *  @return
    */
   closeModal() {
-    this.props.history.push("/comics/");
+    if (this.props.title === "comics") this.props.history.push("/comics/");
+    if (this.props.title === "characters")
+      this.props.history.push("/characters/");
+
     return this.setState(() => ({ modalOpen: false, activeData: {} }));
   }
 
   render() {
-    const { content, loading, title } = this.props;
+    const {
+      content,
+      loading,
+      title,
+      isLoggedIn,
+      addFavorite,
+      deleteFavorite,
+      favorites
+    } = this.props;
     const { modalOpen, activeData } = this.state;
 
     return (
@@ -107,6 +135,7 @@ class Grid extends Component {
               <Thumbnail
                 key={item.id}
                 title={item.title || item.name}
+                categoryTitle={title}
                 thumbnail={item.thumbnail}
                 openModal={this.openModal}
                 data={item}
@@ -119,8 +148,17 @@ class Grid extends Component {
           If modalOpen is true and the url path does not consist of
           an id param in the query string, render the Modal component
         */}
-        {modalOpen && this.props.path !== "/comics/" ? (
-          <Modal content={activeData} closeModal={this.closeModal} />
+        {modalOpen &&
+        this.props.path !== "/comics/" &&
+        this.props.path !== "/characters/" ? (
+          <Modal
+            content={activeData}
+            closeModal={this.closeModal}
+            isLoggedIn={isLoggedIn}
+            addFavorite={addFavorite}
+            deleteFavorite={deleteFavorite}
+            favorites={favorites}
+          />
         ) : null}
         {loading ? <div className={styles.loader} /> : null}
       </div>
