@@ -125,6 +125,19 @@
   text-align: center;
 }
 
+.comic-links-container {
+  overflow-y: scroll;
+  max-height: 150px;
+  padding: 0.5em;
+  background-color: #1e3145;
+}
+.comic-link {
+  display: inline-block;
+  font-size: 7px;
+  text-decoration: none;
+  margin: 4px 0;
+}
+
 .modal-exit-btn {
   text-align: center;
   width: 15px;
@@ -156,7 +169,6 @@
 }
 
 .img-container {
-  background: red;
   width: 75%;
   display: block;
   margin: 1em auto;
