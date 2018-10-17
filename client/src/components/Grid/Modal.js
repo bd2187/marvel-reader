@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
+
 import styles from "./Grid.module.css";
 
 import { Months, zeroCheck } from "../../utils/dates";
@@ -141,28 +142,21 @@ class Modal extends Component {
   }
 
   displayCharactersComics(charactersComics) {
-    const fetchStuff = url => {
-      axios
-        .get(
-          `${url.replace(
-            "http",
-            "https"
-          )}?apikey=7bee794b1db7d98ed6798f95c4bf9865`
-        )
-        .then(res => console.log(res.data.data.results[0]))
-        .catch(err => console.log(err));
-    };
-
     return (
-      <ul>
+      <ul className={styles["comic-links-container"]}>
         {charactersComics.map(comic => {
+          // Extract the comicID from the comic.resourceURI string
+          const comicID = comic.resourceURI
+            ? comic.resourceURI.split("/")[
+                comic.resourceURI.split("/").length - 1
+              ]
+            : "";
+
           return (
-            <li
-              style={{ fontSize: "7px" }}
-              key={comic.name}
-              onClick={fetchStuff.bind(null, comic.resourceURI)}
-            >
-              {comic.name}
+            <li key={comic.name}>
+              <Link className={styles["comic-link"]} to={`/comics/${comicID}`}>
+                {comic.name}
+              </Link>
             </li>
           );
         })}
