@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { connect } from "react-redux";
-import { getAllComics } from "../actions";
+import { getAllFavorites } from "../actions";
 
 import Dashboard from "../components/Dashboard";
 
@@ -25,7 +25,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchComics: function() {
-      dispatch(getAllComics());
+      dispatch(getAllFavorites());
     }
   };
 };
