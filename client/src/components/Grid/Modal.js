@@ -205,10 +205,31 @@ class Modal extends Component {
     // Determine if the content is already in the user's favorites
     if (favorites && favorites.length > 0) {
       var filteredFavorites = favorites.filter(function(item) {
-        return Number(item.comicID) === Number(content.id) ? item : null;
+        if (item.comicID) {
+          return Number(item.comicID) === Number(content.id) ? item : null;
+        } else {
+          return Number(item.characterID) === Number(content.id) ? item : null;
+        }
       });
 
       isFavorite = filteredFavorites.length > 0;
+    }
+
+    var data;
+
+    if (this.props.title === "comics") {
+      data = {
+        comicID: content.id,
+        title: content.title,
+        published: content.dates[0].date,
+        description: content.description
+      };
+    } else if (this.props.title === "characters") {
+      data = {
+        characterID: content.id,
+        name: content.name,
+        thumbnail: content.thumbnail.path + content.thumbnail.extension
+      };
     }
 
     return (
@@ -221,14 +242,7 @@ class Modal extends Component {
           invoke addFavorite
         */
         onClick={() => {
-          return isFavorite
-            ? deleteFavorite(content.id)
-            : addFavorite({
-                comicID: content.id,
-                title: content.title,
-                published: content.dates[0].date,
-                description: content.description
-              });
+          return isFavorite ? deleteFavorite(content.id) : addFavorite(data);
         }}
       >
         <i className="fa fa-heart" />
