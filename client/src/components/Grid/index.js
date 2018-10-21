@@ -158,6 +158,7 @@ class Grid extends Component {
             addFavorite={addFavorite}
             deleteFavorite={deleteFavorite}
             favorites={favorites}
+            title={this.props.title}
           />
         ) : null}
         {loading ? <div className={styles.loader} /> : null}
