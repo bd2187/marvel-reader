@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { addFavoriteCharacter, getAllFavorites } from "../actions";
 
 import Grid from "../components/Grid";
 
@@ -31,6 +32,8 @@ class CharactersContainer extends Component {
   componentDidMount() {
     this.fetchCharacters("a");
     document.addEventListener("scroll", this.handleScroll);
+
+    this.props.getAllFavorites();
   }
 
   /**
@@ -117,16 +120,39 @@ class CharactersContainer extends Component {
         searchedItemID={this.props.match.params.id}
         history={this.props.history}
         path={this.props.match.path}
+        addFavorite={this.props.addFavoriteCharacter}
+        // deleteFavorite={this.props.deleteFavoriteComic}
+        favorites={this.props.favoriteCharacters}
+        isLoggedIn={this.props.isLoggedIn}
       />
     );
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.user.isLoggedIn,
+    favoriteCharacters: state.profile.favoriteCharacters
+  };
+};
+
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    addFavoriteCharacter: function(character) {
+      return dispatch(addFavoriteCharacter(character));
+    },
+
+    getAllFavorites: function() {
+      return dispatch(getAllFavorites());
+    }
+
+    // deleteFavoriteCharacter: function() {
+
+    // }
+  };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withRouter(CharactersContainer));
