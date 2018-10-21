@@ -10,12 +10,12 @@ const Favorites = require("../models/Favorites");
  * Private Route
  */
 router.get(
-  "/comic/all",
+  "/all",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Favorites.findOne({ user: req.user.id }).then(favorites => {
       if (favorites) {
-        return res.json({ comics: favorites.comics });
+        return res.json(favorites);
       } else {
         return res.json({
           status: "fail",
@@ -91,7 +91,7 @@ router.post(
 
     // TODO: ERROR HANDLING / MISSING FIELDS
 
-    const newCharacter = { characterID, name, dateAdded, thumbnail };
+    const newCharacter = { characterID, name, thumbnail };
 
     Favorites.findOne(query).then(favorites => {
       // TODO: CHECK IF COMIC ALREADY EXISTS IN COLLECTION
