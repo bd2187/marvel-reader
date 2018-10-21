@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {
   addFavoriteComic,
   deleteFavoriteComic,
-  getAllComics
+  getAllFavorites
 } from "../actions";
 
 import Grid from "../components/Grid";
@@ -43,7 +43,7 @@ class ComicsContainer extends Component {
     var dateRangeObj = this.getDateRange(0, 3);
 
     this.fetchComics(dateRangeObj);
-    this.props.fetchFavoriteComics();
+    this.props.getAllFavorites();
 
     document.addEventListener("scroll", this.handleScroll);
   }
@@ -212,8 +212,8 @@ const mapDispatchToProps = dispatch => {
     deleteFavoriteComic: function(comicID) {
       return dispatch(deleteFavoriteComic(comicID));
     },
-    fetchFavoriteComics: function() {
-      return dispatch(getAllComics());
+    getAllFavorites: function() {
+      return dispatch(getAllFavorites());
     }
   };
 };
