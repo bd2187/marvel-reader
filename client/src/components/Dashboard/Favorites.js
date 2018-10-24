@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 
-function Favorites(props) {
+const Favorites = props => {
   const { category, collection } = props;
 
   return (
@@ -14,6 +14,6 @@ function Favorites(props) {
       {/* display collection here */}
     </div>
   );
-}
+};
 
 export default Favorites;
