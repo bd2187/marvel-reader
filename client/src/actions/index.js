@@ -6,11 +6,15 @@ import {
   USER_LOG_IN_ERROR,
   ADD_FAVORITE_CHARACTER,
   ADD_FAVORITE_COMIC,
-  USER_LOADING
+  DELETE_FAVORITE_COMIC,
+  DELETE_FAVORITE_CHARACTER,
+  USER_LOADING,
+  UPDATE_ALL_FAVORITES
 } from "../constants";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import setAuthorization from "../utils/setAuthorization";
+import ajax from "../utils/ajax";
 
 export const logInUser = (username, password) => dispatch => {
   dispatch({ type: USER_LOADING, loading: true });
@@ -147,44 +151,73 @@ export const logOutUser = () => {
 };
 
 export const addFavoriteComic = comic => {
-  // dispatch({type: ADD_FAVORITE_COMIC: payload: comic})
   const { comicID, title, published, description } = comic;
 
   return function(dispatch) {
-    axios
-      .post("/favorites/add/comic", { comicID, title, published, description })
-      .then(res => {
+    ajax(
+      "post",
+      "/favorites/add/comic",
+      { comicID, title, published, description },
+      function(res) {
         return dispatch({
           type: ADD_FAVORITE_COMIC,
-          favoriteComics: res
+          favoriteComics: res.data.comics
         });
-      })
-      .catch(err => {
-        console.error(err);
-        return;
-      });
+      }
+    );
   };
 };
 
 export const addFavoriteCharacter = character => {
   const { characterID, name, thumbnail } = character;
+
   return function(dispatch) {
-    axios
-      .post("/favorites/add/character", {
-        characterID,
-        name,
-        thumbnail
-      })
-      .then(res => {
+    ajax(
+      "post",
+      "/favorites/add/character",
+      { characterID, name, thumbnail },
+      function(res) {
         return dispatch({
           type: ADD_FAVORITE_CHARACTER,
-          favoriteChacters: res
+          favoriteCharacters: res.data.characters
         });
-      })
-      .catch(err => {
-        // dispatch error here
-        console.log(`err: ${err}`);
-        return;
+      }
+    );
+  };
+};
+
+export const deleteFavoriteComic = comicID => dispatch => {
+  ajax("delete", "/favorites/delete/comic", { data: { comicID } }, function(
+    res
+  ) {
+    return dispatch({
+      type: DELETE_FAVORITE_COMIC,
+      favoriteComics: res.data.comics
+    });
+  });
+};
+
+export const deleteFavoriteCharacter = characterID => dispatch => {
+  ajax(
+    "delete",
+    "/favorites/delete/character",
+    { data: { characterID } },
+    function(res) {
+      return dispatch({
+        type: DELETE_FAVORITE_CHARACTER,
+        favoriteCharacters: res.data.characters
       });
+    }
+  );
+};
+export const getAllFavorites = () => {
+  return function(dispatch) {
+    ajax("get", "/favorites/all", null, function(res) {
+      dispatch({
+        type: UPDATE_ALL_FAVORITES,
+        favoriteComics: res.data.comics,
+        favoriteCharacters: res.data.characters
+      });
+    });
   };
 };
