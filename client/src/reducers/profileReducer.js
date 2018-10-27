@@ -2,6 +2,7 @@ import {
   ADD_FAVORITE_COMIC,
   ADD_FAVORITE_CHARACTER,
   DELETE_FAVORITE_COMIC,
+  DELETE_FAVORITE_CHARACTER,
   UPDATE_ALL_FAVORITES
 } from "../constants";
 
@@ -27,6 +28,12 @@ const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         favoriteComics: action.favoriteComics
+      };
+
+    case DELETE_FAVORITE_CHARACTER:
+      return {
+        ...state,
+        favoriteCharacters: action.favoriteCharacters
       };
 
     case UPDATE_ALL_FAVORITES:
