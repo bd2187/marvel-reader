@@ -7,7 +7,7 @@ import Dashboard from "../components/Dashboard";
 
 class DashboardContainer extends Component {
   componentDidMount() {
-    this.props.fetchComics();
+    this.props.fetchFavorites();
   }
   render() {
     const { user, profile } = this.props;
@@ -24,7 +24,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchComics: function() {
+    fetchFavorites: function() {
       dispatch(getAllFavorites());
     }
   };
