@@ -37,7 +37,7 @@ router.post(
   (req, res) => {
     const usersID = req.user.id;
     const query = { user: usersID };
-    const { comicID, title, published, description } = req.body;
+    const { comicID, title, published, description, thumbnail } = req.body;
 
     // TODO: ERROR HANDLING / MISSING FIELDS
 
@@ -45,7 +45,8 @@ router.post(
       comicID,
       title,
       published,
-      description
+      description,
+      thumbnail
     };
 
     Favorites.findOne(query).then(favorites => {
