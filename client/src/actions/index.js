@@ -151,13 +151,13 @@ export const logOutUser = () => {
 };
 
 export const addFavoriteComic = comic => {
-  const { comicID, title, published, description } = comic;
+  const { comicID, title, published, description, thumbnail } = comic;
 
   return function(dispatch) {
     ajax(
       "post",
       "/favorites/add/comic",
-      { comicID, title, published, description },
+      { comicID, title, published, description, thumbnail },
       function(res) {
         return dispatch({
           type: ADD_FAVORITE_COMIC,
