@@ -222,13 +222,14 @@ class Modal extends Component {
         comicID: content.id,
         title: content.title,
         published: content.dates[0].date,
-        description: content.description
+        description: content.description,
+        thumbnail: content.thumbnail.path + "." + content.thumbnail.extension
       };
     } else if (this.props.title === "characters") {
       data = {
         characterID: content.id,
         name: content.name,
-        thumbnail: content.thumbnail.path + content.thumbnail.extension
+        thumbnail: content.thumbnail.path + "." + content.thumbnail.extension
       };
     }
 
