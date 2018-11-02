@@ -2,8 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Favorites.module.css";
 
+const deleteItem = (fn, id) => fn(id);
+
 const Favorites = props => {
-  const { category, collection } = props;
+  const { category, collection, deleteFromFaveList } = props;
 
   return (
     <div className={styles["favorites-wrap"]}>
@@ -39,6 +41,16 @@ const Favorites = props => {
                   <Link to={linkToFave}>
                     <img src={item.thumbnail} alt={faveName} />
                   </Link>
+                  <p
+                    className={styles["remove-btn"]}
+                    onClick={deleteItem.bind(
+                      null,
+                      deleteFromFaveList,
+                      item.characterID || item.comicID
+                    )}
+                  >
+                    Remove
+                  </p>
                 </li>
               );
             })}
