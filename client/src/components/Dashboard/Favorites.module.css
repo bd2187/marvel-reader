@@ -57,6 +57,18 @@
   text-align: center;
 }
 
+.user-info-container {
+  width: 90%;
+  /* background: orange; */
+  margin: 1em auto;
+  text-align: center;
+}
+
+.user-info-container h3,
+.user-info-container p {
+  margin: 7px 0;
+}
+
 .remove-btn {
   margin: 5px 0;
   text-align: right;
