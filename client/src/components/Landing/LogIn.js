@@ -42,6 +42,7 @@ class LogIn extends Component {
             data-input="username"
             value={this.state.username}
             onChange={this.onChange}
+            className={styles["login-input"]}
           />
 
           <input
@@ -50,6 +51,7 @@ class LogIn extends Component {
             data-input="password"
             value={this.state.password}
             onChange={this.onChange}
+            className={styles["login-input"]}
           />
 
           {this.props.loading ? (
