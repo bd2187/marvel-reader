@@ -32,7 +32,7 @@ class Register extends Component {
             type="text"
             placeholder="Username"
             dataInput="username"
-            className="registration-input"
+            className={styles["registration-input"]}
             id="signUpUsername"
           />
 
@@ -40,7 +40,7 @@ class Register extends Component {
             type="password"
             placeholder="Password"
             dataInput="password"
-            className="registration-input"
+            className={styles["registration-input"]}
             id="signUpPassword"
           />
 
@@ -48,21 +48,21 @@ class Register extends Component {
             type="password"
             placeholder="Confirm Password"
             dataInput="confirmPassword"
-            className="registration-input"
+            className={styles["registration-input"]}
           />
 
           <TextInput
             type="email"
             placeholder="Email"
             dataInput="email"
-            className="registration-input"
+            className={styles["registration-input"]}
           />
 
           <TextInput
             type="email"
             placeholder="Confirm Email"
             dataInput="confirmEmail"
-            className="registration-input"
+            className={styles["registration-input"]}
           />
 
           {this.props.loading ? (
