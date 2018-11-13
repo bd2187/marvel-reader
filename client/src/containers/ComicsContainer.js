@@ -27,6 +27,7 @@ class ComicsContainer extends Component {
     this.fetchComics = this.fetchComics.bind(this);
     this.updateDateRange = this.updateDateRange.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
+    this.searchComics = this.searchComics.bind(this);
   }
 
   /**
@@ -173,7 +174,28 @@ class ComicsContainer extends Component {
       })
       .catch(err => {
         this.setState({ loading: false });
-        console.log(err);
+      });
+  }
+
+  searchComics(query) {
+    this.setState({ loading: true, comics: [] });
+
+    axios
+      .get(
+        `https://gateway.marvel.com:443/v1/public/comics?titleStartsWith=${query}&orderBy=onsaleDate&limit=100&apikey=7bee794b1db7d98ed6798f95c4bf9865`
+      )
+      .then(res => {
+        document.removeEventListener("scroll", this.handleScroll);
+
+        this.setState(() => {
+          return {
+            comics: res.data.data.results,
+            loading: false
+          };
+        });
+      })
+      .catch(err => {
+        this.setState({ loading: false });
       });
   }
 
@@ -192,6 +214,7 @@ class ComicsContainer extends Component {
         deleteFavorite={this.props.deleteFavoriteComic}
         favorites={this.props.favoriteComics}
         isLoggedIn={this.props.isLoggedIn}
+        searchContent={this.searchComics}
       />
     );
   }
