@@ -10,12 +10,15 @@ class Grid extends Component {
     super(props);
 
     this.state = {
+      query: "",
       modalOpen: false,
       activeData: {}
     };
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.searchContent = this.searchContent.bind(this);
+    this.updateQuery = this.updateQuery.bind(this);
   }
 
   /**
@@ -113,6 +116,16 @@ class Grid extends Component {
     return this.setState(() => ({ modalOpen: false, activeData: {} }));
   }
 
+  searchContent(evt) {
+    evt.preventDefault();
+    var query = this.state.query;
+    this.props.searchContent(query);
+  }
+
+  updateQuery(evt) {
+    this.setState({ query: evt.target.value });
+  }
+
   render() {
     const {
       content,
@@ -127,6 +140,20 @@ class Grid extends Component {
 
     return (
       <div className={styles.wrap}>
+        {!loading ? (
+          <div className={styles["search-container"]}>
+            <form action="#" onSubmit={this.searchContent}>
+              <input
+                type="text"
+                placeholder={`Search ${title}`}
+                className={styles["search-input"]}
+                onChange={this.updateQuery}
+              />
+              {/* <i class="fa fa-search" aria-hidden="true" /> */}
+            </form>
+          </div>
+        ) : null}
+
         {content.length === 0 && !loading ? <h1>No {title} found</h1> : null}
 
         <ul className={styles["thumbnail-ul"]}>
