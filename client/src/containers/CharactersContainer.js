@@ -22,6 +22,7 @@ class CharactersContainer extends Component {
 
     this.fetchCharacters = this.fetchCharacters.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
+    this.searchCharacters = this.searchCharacters.bind(this);
   }
 
   /**
@@ -34,7 +35,10 @@ class CharactersContainer extends Component {
    *
    */
   componentDidMount() {
-    this.fetchCharacters("a");
+    this.props.match.params.query
+      ? this.searchCharacters(this.props.match.params.query)
+      : this.fetchCharacters("a");
+
     document.addEventListener("scroll", this.handleScroll);
 
     this.props.getAllFavorites();
@@ -114,6 +118,27 @@ class CharactersContainer extends Component {
       });
   }
 
+  searchCharacters(userQuery) {
+    this.setState({ loading: true, characters: [] });
+    this.props.history.push(`/characters/search/${userQuery}`);
+
+    axios
+      .get(
+        `https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${userQuery}&orderBy=-name&limit=100&apikey=7bee794b1db7d98ed6798f95c4bf9865
+      `
+      )
+      .then(res => {
+        document.removeEventListener("scroll", this.handleScroll);
+        this.setState({
+          characters: res.data.data.results,
+          loading: false
+        });
+      })
+      .catch(err => {
+        this.setState({ loading: false });
+      });
+  }
+
   render() {
     const { characters, loading } = this.state;
     return (
@@ -128,6 +153,7 @@ class CharactersContainer extends Component {
         deleteFavorite={this.props.deleteFavoriteCharacter}
         favorites={this.props.favoriteCharacters}
         isLoggedIn={this.props.isLoggedIn}
+        searchContent={this.searchCharacters}
       />
     );
   }
