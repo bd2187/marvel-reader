@@ -16,9 +16,14 @@ const routes = (
         <Route exact path="/" component={LandingContainer} />
         <Route exact path="/comics/" component={ComicsContainer} />
         <Route exact path="/comics/:id" component={ComicsContainer} />
-        <Route exact path="/comics/search/:query" component={ComicsContainer} />
         <Route exact path="/characters/" component={CharactersContainer} />
         <Route exact path="/characters/:id" component={CharactersContainer} />
+        <Route exact path="/comics/search/:query" component={ComicsContainer} />
+        <Route
+          exact
+          path="/characters/search/:query"
+          component={CharactersContainer}
+        />
         <PrivateRouteContainer
           path="/dashboard"
           component={DashboardContainer}
