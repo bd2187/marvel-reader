@@ -43,7 +43,11 @@ class ComicsContainer extends Component {
   componentDidMount() {
     var dateRangeObj = this.getDateRange(0, 3);
 
-    this.fetchComics(dateRangeObj);
+    // If a query is present, search for the query. Otherwise, fetch regular comics
+    this.props.match.params.query
+      ? this.searchComics(this.props.match.params.query)
+      : this.fetchComics(dateRangeObj);
+
     this.props.getAllFavorites();
 
     document.addEventListener("scroll", this.handleScroll);
@@ -179,7 +183,7 @@ class ComicsContainer extends Component {
 
   searchComics(query) {
     this.setState({ loading: true, comics: [] });
-
+    this.props.history.push(`/comics/search/${query}`);
     axios
       .get(
         `https://gateway.marvel.com:443/v1/public/comics?titleStartsWith=${query}&orderBy=onsaleDate&limit=100&apikey=7bee794b1db7d98ed6798f95c4bf9865`
