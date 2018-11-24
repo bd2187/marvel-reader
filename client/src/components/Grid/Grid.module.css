@@ -8,20 +8,21 @@
 
 .thumbnail-ul {
     display: flex;
-    /* flex-direction: column; */
     flex-wrap: wrap;
     justify-content: space-around;
-    /* background: green; */
+    align-content: space-around;
     width: 90%;
+    max-width: 1290px;
     margin: 0 auto;
 }
 
 .thumbnail {
     width: 45%;
-    background: blue;
+    background: #36577a;
     margin: 1em 0;
     position: relative;
     cursor: pointer;
+    /* margin: 10px; */
 }
 
 .thumbnail-overlay {
