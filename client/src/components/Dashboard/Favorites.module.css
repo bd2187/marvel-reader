@@ -1,75 +1,77 @@
 .category-container {
-  margin: 2em 0;
+    margin: 2em 0;
 }
 
 .category-container h1 {
-  text-align: center;
+    text-align: center;
 }
 
 .favorites-container {
-  background-color: #111b26;
-  padding: 2em;
-  height: 700px;
-  overflow-y: scroll;
+    background-color: #111b26;
+    padding: 2em;
+    height: 700px;
+    max-width: 700px;
+    margin: 0 auto;
+    overflow-y: scroll;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1em;
 }
 
 .favorites-item {
-  width: 200px;
-  margin: 1em 0;
+    width: 200px;
+    margin: 1em 0;
 }
 
 .favorites-item h3 {
-  margin: 10px 0;
-  text-align: center;
+    margin: 10px 0;
+    text-align: center;
 }
 
 .favorites-item img {
-  width: 100%;
+    width: 100%;
 }
 
 .favorites-wrap {
-  width: 90%;
-  margin: 0 auto;
+    width: 90%;
+    margin: 0 auto;
 }
 
 .favename {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .no-favorites-message {
-  margin: 2em 0;
-  text-align: center;
-  color: #de0000;
+    margin: 2em 0;
+    text-align: center;
+    color: #de0000;
 }
 
 .more-links-container {
-  margin: 2em 0;
+    margin: 2em 0;
 }
 
 .more-links-container a {
-  display: block;
-  margin: 5px 0;
-  text-align: center;
+    display: block;
+    margin: 5px 0;
+    text-align: center;
 }
 
 .user-info-container {
-  width: 90%;
-  /* background: orange; */
-  margin: 1em auto;
-  text-align: center;
+    width: 90%;
+    /* background: orange; */
+    margin: 1em auto;
+    text-align: center;
 }
 
 .user-info-container h3,
 .user-info-container p {
-  margin: 7px 0;
+    margin: 7px 0;
 }
 
 .remove-btn {
-  margin: 5px 0;
-  text-align: right;
+    margin: 5px 0;
+    text-align: right;
 }
