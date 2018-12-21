@@ -1,6 +1,13 @@
 import React, { Component } from "react";
+import axios from "axios";
 
-function MainContent(WrappedComponent, initialQueryForContent) {
+function MainContent(
+    WrappedComponent,
+    initialQueryForContent,
+    category,
+    updateQueryCb,
+    generateEndpoint
+) {
     return class ContentContainer extends Component {
         constructor(props) {
             super(props);
@@ -16,10 +23,10 @@ function MainContent(WrappedComponent, initialQueryForContent) {
 
         componentDidMount() {
             // this.props.match.params.query
-            //     ? this.searchContent(this.props.match.params.query)
+            //     ? this.searchContent(this.props.match.params.query, category)
             //     : this.fetchContent(initialQueryForContent);
-            // this.props.getAllFavorites();
-            // document.addEventListener('scroll', this.handleScroll);
+            // // this.props.getAllFavorites();
+            // document.addEventListener("scroll", this.handleScroll);
         }
 
         updateContent(contentArr = []) {
@@ -30,39 +37,64 @@ function MainContent(WrappedComponent, initialQueryForContent) {
             this.setState({ loading: isLoading });
         }
 
-        fetchContent(query, endpoint) {
+        fetchContent(query) {
             this.setState({ loading: true });
 
-            // axios
-            // .get(endpoint)
-            // .then(res => {
-            //     this.setState(prevstate => {
-            //         return {
-            //             query,
-            //             content: [this.state.content, ...res.data.data.results]
-            //         };
-            //     });
+            var endpoint = generateEndpoint("update", query);
 
-            //     this.setState({ loading: true });
-            // })
-            // .catch(err => {
-            //     this.setState({ loading: true });
-            // });
+            axios
+                .get(endpoint)
+                .then(res => {
+                    this.setState(() => {
+                        return {
+                            query: query,
+                            content: [
+                                this.state.content,
+                                ...res.data.data.results
+                            ]
+                        };
+                    });
+
+                    this.setState({ loading: true });
+                })
+                .catch(err => {
+                    this.setState({ loading: true });
+                });
+        }
+
+        handleScroll() {
+            if (
+                window.innerHeight + window.scrollY >=
+                    document.body.offsetHeight &&
+                this.state.query &&
+                !this.state.loading
+            ) {
+                this.fetchContent(this.updateQuery());
+            }
+        }
+
+        updateQuery() {
+            var updatedQuery = updateQueryCb(this.state.query);
+            this.setState(updatedQuery);
+            return updatedQuery;
         }
 
         searchContent(endpoint, query) {
             this.setState({ content: [], loading: true });
-            // this.props.history.push(`/comics/search/${query}`);
+            this.props.history.push(`/comics/search/${query}`);
 
-            // axios
-            // .get(endpoint)
-            // .then(res => {
-            //     document.removeEventListener("scroll", this.handleScroll);
-            //     this.setState({ content: res.data.data.results, loading: false });
-            // })
-            // .catch(err => {
-            //     this.setState({loading: false});
-            // });
+            axios
+                .get(endpoint)
+                .then(res => {
+                    document.removeEventListener("scroll", this.handleScroll);
+                    this.setState({
+                        content: res.data.data.results,
+                        loading: false
+                    });
+                })
+                .catch(err => {
+                    this.setState({ loading: false });
+                });
         }
 
         render() {
